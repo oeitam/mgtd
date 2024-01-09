@@ -1,0 +1,15 @@
+.idea/
+__pycache__/
+.vscode/
+*code-workspace
+*.log
+
+*pyc
+
+*.cfg
+*.qur
+*.json
+*jpg
+*.txt
+*output/
+local_*
