@@ -1,0 +1,21 @@
+client_sa.py -> for production
+client_direct.py -> client class for testing !!! (def.test_commands) gets the server in the constractor!!
+    no tcpip I think
+client_script.py -> connects to the server over a socket. supprots testing depending on the config (prod/socker)
+
+server_script.py -> implementaiton of a get-sendback server
+server.py -> implementation of server class. server_process is the main method. communicates and sends data to gtd
+    class to process.
+    Note: when calling the server, we load the defs.py file which initiates the 
+        configs etc based on the C:\weekly.local directory
+
+had 3 directories
+    production
+    demo
+    developement
+with 3 configs and scripts to switch between them (gotoproduciton.py)
+modes
+    socket (0)
+    direct (1)
+    prod (2)
+

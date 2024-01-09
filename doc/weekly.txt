@@ -1,0 +1,282 @@
+
+What do I need it for?
+======================
+
+1. store tasks in a style like Getting Things Done (GTD) that is
+ - tasks
+ - projects
+ - time of the task (like reminders, TAF-TAF)
+2. backlog of tasks
+3. log what I am doing and working on
+4. print out what I did in a time frame
+
+
+
+Features, Data Items, Data Structures
+=====================================
+
+* TASK
+- a to do thing
+- Has:
+ - ID
+ - State( Open, Closed, OnHold, Stopped)
+ - PROJECT (one)
+ - creation date
+ - (0) Due Date
+ - (o) location
+ - (o) expiration date
+ - (o) context (like - a meeting it relates to)
+ - (0) reminders
+ - (0) ACTIVITY(s)
+ - (o) subTASK(s)
+ - (o) parent TASK
+
+* ACTIVITY
+ - describes an activity that is being done
+ - can be an activity on a task
+ - of descriptive manner - with goal in mind - what did I work on
+ - Has:
+  - ID
+  - State (Started, Ended, Stopped) [note that the fact that an ACTIVITY does not
+            have an 'Ended' time does not mean it did not end]
+  - start time
+  - end time
+  - (o)related TASK(s) (and through this - PROJECT and MEGAPROJECT
+
+* PROJECT
+ - a central theme that has multiple TASKs and ACTIVITIES related to it
+ - a set of TASKS and ACTIVITYs
+ - Has
+  - ID
+  - (o) start, end, duedate
+
+
+* MEGAPROJECT
+ - a big thing project that includes several projects. perhaps just 'home' and 'work'
+ - Has:
+  - ID
+  - State
+
+* Procedures
+ - clean - checks the database for correctness and fixes (with permission)
+   example: due date things, projects w/o tasks, tasks w/o projects etc
+
+* Interface context
+ - after a command is executed, some of its context remain, so it is easier to
+    perform the next command in that context.
+    for example: after creating a task, the task remains in the context, and one can
+    set some of the attributes for that task in the following command.
+    only a subset of the commands looks at the context
+
+list of PROJECTS
+
+list of MEGAPROJECTS
+Home
+Work
+
+Consider:
+ - priority
+ -
+
+Language/Syntax
+================
+Terms:
+sw - single word (== characters w/o spaces)
+mw - multiple words (== including spaces)
+
+command:
+Create megaproject <name sw> #<description mw>
+return:
+megaproject ID
+
+command:
+Create project <name sw> @<megaproject sw> #<description mw>
+return:
+project ID
+
+command:
+task @<project sw> #<description mw>
+return:
+task ID
+
+command:
+Attach <something A> to <Something B> #<the value of what to attach, sw or mw>
+Somthing A      Something B     Meaning
+Task            Project
+Activity        Task
+Task            Activity
+Task            Task            create subtask
+return:
+completion report, what happened
+
+command:
+Set <attribute sw> @<ID of a the item> to #<the value to be set for, sw or mw>
+return:
+Completion report, including old value and new value
+
+command:
+Start @<ID of a Task or a project or 0 (for non affiliated activity)> #<description of the activity mw>
+return:
+ACTIVITY ID, Start time, info from related task
+
+command:
+Stop @<ACTIVITY ID>
+return:
+Completion status, start and stop time, info from related task
+
+command:
+Continue @<ACTIVITY ID>
+return:
+Completion status, Start time, info from related task
+
+command:
+Search @<field name or 'All' to get all fields> #<text to look for, sw or mw>
+return:
+List of items which satisfy the search criteria
+
+
+command:
+List <Item (TASK, ACTIVITY, ...) | <criteria>
+    criteria = dates, IDs, start date, completed, etc.
+    syntax is TBD
+    *list @XXXX   (ID)
+    *list m/p/t/a (meanining - all of them)
+    *list m/p/t/a limit [xx = 10 by default]
+    *list next [after limit, but not necessarily]
+    ****list m/p/t/a col[umn] col_name is/inc/not/ninc yyyy
+    *list m/p/t/a col[umn] col_name range low high
+      low high => ID, time
+      bot[tom] - the lowers possible low
+      top      - the highest possible high
+    *list m/p/t/a for m/p/t/a nnnn
+    *list m for p nnnn
+    *list p for m nnnn
+    *list t for p nnnn
+    *list a for p nnnn
+    *list a for t nnnn
+    *list m/p/t/a columns
+    *list m/p/t/a states
+    <><>list m/p/t/a head [xx]
+    <><>list m/p/t/a tail [xx]
+    <><>list m/p s ==> list all uniqe megaprojects and projects
+    *list a/t wwxx => lists activities for work week for the last 12 months
+    *list search | <mw> [regular expression search all over]
+    --
+    constructs, can be combined:
+    field in yyyy
+    field in range low high
+    for p/m/t nnnn
+    --
+    field: match the one in the dataframe, but can be in lower case
+return:
+List of
+
+command:
+ci [p/m x]
+co
+==> lists the time as an activity with time adjustment (p/m = plus/minus, x = hours)
+returns:
+Acknoledge
+
+
+command:
+clean
+    check that all relations are legal
+    check that non legal fields for items are indeed not set
+
+return:
+requests for permission per fix it needs to do
+completion message for each fix operation
+
+command:
+die
+return:
+Nothing. Gracefully kill the program - client and server
+
+
+command:
+
+return:
+
+More syntax
+===========
+recurring patterns
+free text:
+# <description mw><end of line>
+
+relation, belongs to
+@<name sw>
+
+: sort by
+> or < descending or ascending orcer
+D dates
+P projects
+ID id of any item
+? context
+
+
+key words
+--------
+create
+project
+task
+activity
+attach
+set
+continue
+(resume)
+list
+clean
+search
+start
+delete
+context
+die
+
+Database
+========
+
+Have multiple data bases
+ - one for mega projects
+ - one for projects
+ - one for tasks
+ - one for activities
+ - one for context
+??
+
+Database columns:
+Type
+    or ? a column for each type itself
+    Task
+    Activity
+    Project
+    Megaproject
+Creation date
+State
+?State history (free text of all transitions and timestamps?)
+Completion Date
+ID
+Parent
+Content
+Context
+
+
+Operation
+=========
+
+
+Comments for later
+===================
+
+1. consep[t of context for consecutive commands
+2. each message (client-server or server-client) need to have an ID and be logged,
+   since it will help debug later. perhaps more info (like time also)
+3. teh db is stored on disk after each operation. the older version is also stored
+    so after each transaction, we have current and previous versions on disk
+4. there seems to be a problem with the fact that i am using tokenize. it treats things
+    that look like operators even if are in the middle of free text ... this is
+    problematic in long descriptions, for example.
+    need to see what can be done.
+5. today | something I want to do today [create a task for today in a project named today(?)
+
+
