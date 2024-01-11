@@ -1731,7 +1731,7 @@ class Db(object):
                     #print(index, row)
                     namesub = " ".join(row['Description'].split(" ")[:4]) # take first 4 words
                     #find the project or task id (assume one of them is avaialble, no third option)
-                    if row['TASK'] != None: # this is a task activity
+                    if row['TASK'] != None and row['TASK'] != '': # this is a task activity
                         lid = int(row['TASK'])
                         parent_rec = 'Task'
                     else:
@@ -1742,6 +1742,11 @@ class Db(object):
                     cnt += 1                        
                     lcnt = 1 
                     for i in rowslist:
+                        #if i['ID'].values[0] == lid: # found in location lcnt
+                        #    # now - push after the last activity in a streak (watch for end of rows!)
+                        #    for j in range(1,len(rowlist)-lcnt):
+                        #        if rowslist[j]['Type4'] != 'Activity': #insert here, else - check next one
+                        #            break
                         if i['ID'].values[0] == lid: # found in location lcnt
                             break
                         lcnt += 1
@@ -1805,7 +1810,7 @@ class Db(object):
         scolors = {
             'OPEN'    : '#D5F5E3',
             'CLOSED'  : '#5D6D7E',
-            'DORMANT' : '#FEF9E7',
+            'DORMANT' : '#76448A',
             'HALTED'  : '#FBEEE6'
         }
         hcolors = { 

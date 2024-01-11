@@ -9,7 +9,7 @@ add:
  - make the adding from clip board work!!
  - search to TODO and fix
  - document all commands
- - how to manage the location of the database (so it is backed up, for example)
+ - how to manag and control the location of the database (so it is backed up, for example, or based on parameter path)
  - document how to run in dev mode and production mode, direct and server modes
  - ~~Done print/html the database in hierarchy megaproject - its projects - task for each project~~
  - ~~Done add color to the html (like open vs closed, already added for hierarchical)~~
@@ -40,6 +40,9 @@ add:
  - consider running list html each time entering into the program
  - for list html - make default to not include closed (keep dormant and on hold for now). allow also an option to list all (list html all)
  - the command "task states" created a task for some reason ... not good. fix
+ - list all tags
+ - when tagging - notify the user if the tag is new or existing
+ - add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
  - END
       
 

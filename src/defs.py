@@ -237,7 +237,7 @@ def check_for_and_create_cfg():
         f.write('\n')
         f.write(r'mode_sel = 2')
         f.write('\n')
-        f.write(r'local_client_script = C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\OEWeekly\src\server\client_script.py')
+        f.write(r'local_client_script = C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd\src\server\client_script.py')
         f.write('\n')
         f.write(r'dev_or_prod = production')
         f.write('\n')

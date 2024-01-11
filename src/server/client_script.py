@@ -7,8 +7,8 @@ import sys
 #if 'C:\\Users\\oeitam\\PycharmProjects\\weekly' not in sys.path:
 #    sys.path.append(r'C:\Users\oeitam\PycharmProjects\weekly')
 
-if 'C:\\Users\\oeitam\\OneDrive - Intel Corporation\\Documents\\Z-Work\\Projects\\OEWeekly' not in sys.path:
-    sys.path.append(r'C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\OEWeekly')
+if 'C:\\Users\\oeitam\\OneDrive - Intel Corporation\\Documents\\Z-Work\\Projects\\mgtd' not in sys.path:
+    sys.path.append(r'C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd')
 
 
 
