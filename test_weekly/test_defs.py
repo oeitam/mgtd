@@ -3,9 +3,12 @@
 #print('test_defs.py !!')
 
 test_commands = [
-    'start @130 fromcb',
-    'list activity',
-    'die'
+    #'start @130 fromcb',
+    #'create megaproject AAAA',
+    #'create project bbb @AAAA',
+    #'task @106 | bla lba bla',
+    'online',
+    'die',
     'sleep @249  plus 10| sleep text',
     'cont @249 | cont text',
     'list html',

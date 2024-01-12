@@ -7,7 +7,8 @@ import os
 from datetime import datetime, timedelta #, date, time, timedelta
 
 # paths
-
+mgtd_code_path  = r"C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd"
+mgtd_local_path = r"C:\mgtd.local"
 
 
 debug_delta = timedelta(days=0)
@@ -227,29 +228,49 @@ db_names = {'dfm': 'Megaprojects DataFrame',
 ###############################################################################
 # check if the config file exists, and if not - craete one
 def check_for_and_create_cfg():
-    if not os.path.isdir(r'C:\mgtd.local'):
-        os.mkdir(r'C:\mgtd.local')
-    if not os.path.isfile(r'C:\mgtd.local\mgtd.local.cfg'):
+    if not os.path.isdir(mgtd_local_path):
+        os.mkdir(mgtd_local_path)
+    if not os.path.isfile(mgtd_local_path + r'\mgtd.local.cfg'):
         # write that file
-        f = open(r'C:\mgtd.local\mgtd.local.cfg','w')
+        f = open(mgtd_local_path + r'\mgtd.local.cfg','w')
         f.write('\n')
         f.write(r'[MAIN]')
         f.write('\n')
-        f.write(r'data_loc = C:\mgtd.local')
+        f.write(r'data_loc = ' + mgtd_local_path)
         f.write('\n')
         f.write(r'mode_sel = 2')
         f.write('\n')
-        f.write(r'local_client_script = C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd\src\server\client_script.py')
+        f.write(r'local_client_script = ' + mgtd_code_path + '\src\server\client_script.py')
         f.write('\n')
         f.write(r'dev_or_prod = production')
         f.write('\n')
         f.write('\n')
         f.close()
 
+    # if not os.path.isdir(r'C:\mgtd.local'):
+    #     os.mkdir(r'C:\mgtd.local')
+    # if not os.path.isfile(r'C:\mgtd.local\mgtd.local.cfg'):
+    #     # write that file
+    #     f = open(r'C:\mgtd.local\mgtd.local.cfg','w')
+    #     f.write('\n')
+    #     f.write(r'[MAIN]')
+    #     f.write('\n')
+    #     f.write(r'data_loc = C:\mgtd.local')
+    #     f.write('\n')
+    #     f.write(r'mode_sel = 2')
+    #     f.write('\n')
+    #     f.write(r'local_client_script = C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd\src\server\client_script.py')
+    #     f.write('\n')
+    #     f.write(r'dev_or_prod = production')
+    #     f.write('\n')
+    #     f.write('\n')
+    #     f.close()
+
+
 check_for_and_create_cfg()
 
 config = configparser.ConfigParser()
-config.read(r'C:\mgtd.local\mgtd.local.cfg')
+config.read(mgtd_local_path + r'\mgtd.local.cfg')
 
 dev_or_prod         = config['MAIN']['dev_or_prod']
 data_loc            = config['MAIN']['data_loc']

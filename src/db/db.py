@@ -397,16 +397,16 @@ class Db(object):
                 self.db_table[which_db] = self.dfa
         else: # here we assume that the databaser alrad has an index 'ID'
             if which_db == 'dfm':
-                self.dfm = self.dfm.append(df_to_add)
+                self.dfm = pd.concat([self.dfm, df_to_add])
                 self.db_table[which_db] = self.dfm
             if which_db == 'dfp':
-                self.dfp = self.dfp.append(df_to_add)
+                self.dfp = pd.concat([self.dfp, df_to_add])
                 self.db_table[which_db] = self.dfp
             if which_db == 'dft':
-                self.dft = self.dft.append(df_to_add)
+                self.dft = pd.concat([self.dft, df_to_add])
                 self.db_table[which_db] = self.dft
             if which_db == 'dfa':
-                self.dfa = self.dfa.append(df_to_add)
+                self.dfa = pd.concat([self.dfa, df_to_add])
                 self.db_table[which_db] = self.dfa
 
         # this return checks for nothing ... just returnning true
@@ -1762,7 +1762,7 @@ class Db(object):
             s1 += dd.to_html(#formatters={'Comments': print_a_list}, 
                             justify='left')
             s11 = self.add_color_to_hierarchical_html(s1)
-            file = open(r'C:/mgtd.local/{}/list_html_{}_hier.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
+            file = open(defs.mgtd_local_path + r'/{}/list_html_{}_hier.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s11)
             file.close()            
 
@@ -1788,7 +1788,7 @@ class Db(object):
                         s2l[i] = s2l[i].replace('\\n, +++','<br>+++')
                         s2l[i] = s2l[i].replace('\&lt;br\&gt;','\<br> ')
                 s2 = "\n".join(s2l)
-            file = open(r'C:/mgtd.local/{}/list_html_{}.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
+            file = open(defs.mgtd_local_path + r'/{}/list_html_{}.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s2)
             file.close()            
 

@@ -3,6 +3,8 @@ import socket
 import sys
 import os
 import time
+from datetime import datetime
+import shutil
 from subprocess import Popen, CREATE_NEW_CONSOLE
 from src import defs
 from src.server import client_direct
@@ -52,7 +54,11 @@ class Server(object):
         #print("--" + slm + "--")
         return slm
 
-
+    def zip_data(self):
+        today_str = datetime.now().strftime("%Y%m%d-%H%M")
+        output_filename = defs.mgtd_code_path + '\datastore\\' + today_str
+        source_dir = defs.mgtd_local_path
+        shutil.make_archive(output_filename, format='zip', root_dir=source_dir)
 
     # server_process method is the main method of the server
     # crates a socket from the server for the client to use
@@ -87,7 +93,10 @@ class Server(object):
                 while True:
                     data = connection.recv(1024)
                     print('recieved "%s"' % data.decode(), file=sys.stderr)
-                    [t1, t2] = data.decode().split(":",1) # t2 gets the actual what sent by client w/o the number of chars
+                    if ":" in data.decode():
+                        [t1, t2] = data.decode().split(":",1) # t2 gets the actual what sent by client w/o the number of chars
+                    else:
+                        t2 = data.decode()
                     if (defs.die_word in t2[:3]): # 'die' would be here in case of die
                     # if (defs.die_word in data.decode()):
                         print('server: Dieing!!!')
@@ -117,6 +126,8 @@ class Server(object):
 
             finally:
                 # Clean up the connection
+                print('Zipping and saving datebase\n')
+                self.zip_data()
                 print('server: Closing socket', file=sys.stdout)
                 connection.close()
                 break
