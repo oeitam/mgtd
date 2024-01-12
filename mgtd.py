@@ -4,8 +4,8 @@ import sys
 import logging
 
 logger = logging.getLogger()
-logging.basicConfig(filename='weekly.log', filemode='w', level=logging.DEBUG)
-logging.info('Logging (into weekly.log)Started')
+logging.basicConfig(filename='mgtd.log', filemode='w', level=logging.DEBUG)
+logging.info('Logging (into mgtd.log)Started')
 
 
 from src.db import db as database

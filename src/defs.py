@@ -1,4 +1,4 @@
-# this file includes definitions, strings, help, etc for the weekly project
+# this file includes definitions, strings, help, etc for the weekly->mgtd project
 
 from ast import literal_eval
 
@@ -6,9 +6,11 @@ import configparser
 import os
 from datetime import datetime, timedelta #, date, time, timedelta
 
+# paths
+
+
+
 debug_delta = timedelta(days=0)
-
-
 
 future = datetime.strptime('31/Dec/2099', '%d/%b/%Y')
 
@@ -225,15 +227,15 @@ db_names = {'dfm': 'Megaprojects DataFrame',
 ###############################################################################
 # check if the config file exists, and if not - craete one
 def check_for_and_create_cfg():
-    if not os.path.isdir(r'C:\weekly.local'):
-        os.mkdir(r'C:\weekly.local')
-    if not os.path.isfile(r'C:\weekly.local\weekly.local.cfg'):
+    if not os.path.isdir(r'C:\mgtd.local'):
+        os.mkdir(r'C:\mgtd.local')
+    if not os.path.isfile(r'C:\mgtd.local\mgtd.local.cfg'):
         # write that file
-        f = open(r'C:\weekly.local\weekly.local.cfg','w')
+        f = open(r'C:\mgtd.local\mgtd.local.cfg','w')
         f.write('\n')
         f.write(r'[MAIN]')
         f.write('\n')
-        f.write(r'data_loc = C:\weekly.local')
+        f.write(r'data_loc = C:\mgtd.local')
         f.write('\n')
         f.write(r'mode_sel = 2')
         f.write('\n')
@@ -247,7 +249,7 @@ def check_for_and_create_cfg():
 check_for_and_create_cfg()
 
 config = configparser.ConfigParser()
-config.read(r'C:\weekly.local\weekly.local.cfg')
+config.read(r'C:\mgtd.local\mgtd.local.cfg')
 
 dev_or_prod         = config['MAIN']['dev_or_prod']
 data_loc            = config['MAIN']['data_loc']

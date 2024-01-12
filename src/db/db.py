@@ -6,7 +6,8 @@ import pandas as pd
 import numpy as np
 import logging
 import re
-# TODO import win32clipboard
+# TODO 
+import win32clipboard
 
 import io
 from datetime import datetime
@@ -546,9 +547,10 @@ class Db(object):
     def create_project(self):
         # check if project exists
         if self.dfp is not None:
-            if (self.project_name) in self.dfp['Name'].values:
-                logger.debug("Request to create an already existing project {} {}".format(self.project_name, self.dfp['Name'].values))
-                #temp return False
+            if (self.project_name) in self.dfp[self.dfp['MEGAPROJECT'] == self.megaproject_name]['Name'].values: # search if the project name exists in the same megaproject
+                logger.debug("Request to create an already existing project in the Megaproject {} {}".format(self.project_name, self.dfp['Name'].values))
+                self.error_details = "Request to create an already existing project in the Megaproject {} {}".format(self.project_name, self.dfp['Name'].values)
+                return False
         # check if the mega project exsists
         if self.dfm is not None:
             if self.megaproject_name not in self.dfm['Name'].values:
@@ -569,7 +571,8 @@ class Db(object):
                 self.trans_description = win32clipboard.GetClipboardData()
                 win32clipboard.CloseClipboard()
             except TypeError as e:
-                print(e)
+                print("win32clipboard error: " + e)
+                win32clipboard.CloseClipboard()
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("%I:%M:%S%p on %B %d, %Y")
         l = [self.project_name, 'Started', self.megaproject_name, self.trans_description,tag,today_adjusted_str,[],[],[]]
@@ -605,8 +608,8 @@ class Db(object):
                 self.trans_description = win32clipboard.GetClipboardData()
                 win32clipboard.CloseClipboard()
             except TypeError as e:
-                print(e)
-
+                print("win32clipboard error: " + e)
+                win32clipboard.CloseClipboard()
         l = [self.megaproject_name, 'On', [], self.trans_description, []]
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfm_columns)
         ldf.index.name = 'ID'
@@ -630,7 +633,8 @@ class Db(object):
                 self.trans_description = win32clipboard.GetClipboardData()
                 win32clipboard.CloseClipboard()
             except TypeError as e:
-                print(e)
+                print("win32clipboard error: " + e)
+                win32clipboard.CloseClipboard()
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("(a) %I:%M:%S%p on %B %d, %Y")
         l = ['Open', self.trans_description, self.get_time_str(date.today()),
@@ -682,7 +686,8 @@ class Db(object):
                 self.trans_description = win32clipboard.GetClipboardData()
                 win32clipboard.CloseClipboard()
             except TypeError as e:
-                print(e)
+                print("win32clipboard error: " + e)
+                win32clipboard.CloseClipboard()
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("%I:%M:%S%p on %B %d, %Y")
         l = ['Started', self.get_time_str(date.today()), self.trans_description,tag, '',
@@ -1361,7 +1366,7 @@ class Db(object):
         return True
 
     def list_shortcut(self):
-        defs.config.read(r'C:\weekly.local\weekly.local.cfg')
+        defs.config.read(r'C:\mgtd.local\mgtd.local.cfg')
         self.list_resp = ''
         for sect in defs.config.sections():
             if 'replace_' in sect:
@@ -1387,7 +1392,7 @@ class Db(object):
                     max_replacement_num = int(a3) +1
         # write to config file, assuming replacement is always 3 long !
         l = eval(self.trans_description)
-        f = open(r'C:\weekly.local\weekly.local.cfg', 'a')
+        f = open(r'C:\mgtd.local\mgtd.local.cfg', 'a')
         f.write('\n')
         f.write('[replace_{}]\n'.format(max_replacement_num))
         f.write('replacement_type = {}\n'.format(l[0]))
@@ -1395,7 +1400,7 @@ class Db(object):
         f.write('replace_with  = {}\n\n'.format(l[2]))
         f.close()
         # reread the config
-        defs.config.read(r'C:\weekly.local\weekly.local.cfg')
+        defs.config.read(r'C:\mgtd.local\mgtd.local.cfg')
         return True
 
     def delete_shortcut(self):
@@ -1406,7 +1411,7 @@ class Db(object):
                            .format(self.shortcut_to_delete))
             return False
         else:
-            f = open(r'C:\weekly.local\weekly.local.cfg', 'w')
+            f = open(r'C:\mgtd.local\mgtd.local.cfg', 'w')
             defs.config.write(f)
             f.close()
         # copy_line = True
@@ -1414,7 +1419,7 @@ class Db(object):
         # temp_file = r'c:\temp\stamfile.txt'
         # pat = '^\[replace_'+self.shortcut_to_delete+'\]'
         # f = open(temp_file, 'w')
-        # with open(r'C:\weekly.local\weekly.local.cfg') as origin_file:
+        # with open(r'C:\mgtd.local\mgtd.local.cfg') as origin_file:
         #     for line in origin_file:
         #         if copy_line :
         #             m = re.match(pat, line)
@@ -1431,7 +1436,7 @@ class Db(object):
         #                 f.write(line)
         #
         # f.close()
-        # move(temp_file,r'C:\weekly.local\weekly.local.cfg')
+        # move(temp_file,r'C:\mgtd.local\mgtd.local.cfg')
         # if not did_delete: # meaning - did not find the requested shortcut
         #     self.had_error('Could not find the requested shortcut - number {}\n'\
         #                    .format(self.shortcut_to_delete))
@@ -1758,7 +1763,7 @@ class Db(object):
             s1 += dd.to_html(#formatters={'Comments': print_a_list}, 
                             justify='left')
             s11 = self.add_color_to_hierarchical_html(s1)
-            file = open(r'C:/weekly.local/{}/list_html_{}_hier.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
+            file = open(r'C:/mgtd.local/{}/list_html_{}_hier.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s11)
             file.close()            
 
@@ -1770,7 +1775,7 @@ class Db(object):
                 df = self.db_table[db]
                 if df is None:
                     continue
-                #df.to_html(r'C:/weekly.local/{}/{}.html'.format(defs.dev_or_prod, db))
+                #df.to_html(r'C:/mgtd.local/{}/{}.html'.format(defs.dev_or_prod, db))
                 s2 += df.to_html(#formatters={'Comments': print_a_list}, 
                             justify='left')
                 #s1 += df.style.to_html(justipy='left')
@@ -1784,7 +1789,7 @@ class Db(object):
                         s2l[i] = s2l[i].replace('\\n, +++','<br>+++')
                         s2l[i] = s2l[i].replace('\&lt;br\&gt;','\<br> ')
                 s2 = "\n".join(s2l)
-            file = open(r'C:/weekly.local/{}/list_html_{}.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
+            file = open(r'C:/mgtd.local/{}/list_html_{}.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s2)
             file.close()            
 

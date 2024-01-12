@@ -5,18 +5,18 @@ add:
     ~~can this basically be the tag I already have?~~
  - ~~DONE add to tagging to test if tag exists - do not add it~~
  - ~~Done add priority to tasks, activities~~
- - Do not allow to create two projects with same name in one megaproject, no 2 megaprojects with same name
- - make the adding from clip board work!!
+ - ~~DOneDo not allow to create two projects with same name in one megaproject, no 2 megaprojects with same name~~
+ - ~~Done make the adding from clip board work!!~~
  - search to TODO and fix
  - document all commands
- - how to manag and control the location of the database (so it is backed up, for example, or based on parameter path)
+ - Patially ~~Done how to manag and control the location of the database (so it is backed up, for example, or based on parameter path)~~
  - document how to run in dev mode and production mode, direct and server modes
  - ~~Done print/html the database in hierarchy megaproject - its projects - task for each project~~
  - ~~Done add color to the html (like open vs closed, already added for hierarchical)~~
  - ~~Done document all the commands~~
  - enable bulk priority [of a list of ids] some priorioty (bulk priority change)
  - add that when the server is dying, it will copy the local directory to the area that is being backed up in one-drive. keep prod/dev seperatelly and override old
- - support bulk upload of commands from a csv file
+ - support bulk upload of commands from a txt file
  - add default sort and filter in the printing of DF - in regular list and in list html
  - ~~Done when listing a single item - still report in a table (unless want all fields) or list in a column (not a row)~~
  - when listing activity - for the project and task include first 2/3 words, not just the number
@@ -57,6 +57,11 @@ add:
 ## opens/unknowns
 does subtask (task @<taskid>) work?\
 not implemented [swap, today, clean]
+
+## system settings
+need to have the following system variables\
+"mgdt_code_path" = "C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd"
+"mgdt_local_path" = "C:\mgtd.local"
 
 ## Operation
 this describes points how I use it (Jan 2024)
@@ -298,7 +303,15 @@ help some_term\
 Filters the help message (a hard coded list of commands examples) for some_term and returns the results
 
 
-### fromcb
-Takes text from the system clipboard top. Assumed textual\
+### fromcb (not a command, a term in a command)
+Takes text from the system clipboard top. Assumed textual.\
+Uses the content of the ckipboard for the transaction description\
+(like what comes after the "|" )\
+[does this really work ????]
+
+
+
+
+
 
 

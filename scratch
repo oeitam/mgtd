@@ -7,7 +7,7 @@ server_script.py -> implementaiton of a get-sendback server
 server.py -> implementation of server class. server_process is the main method. communicates and sends data to gtd
     class to process.
     Note: when calling the server, we load the defs.py file which initiates the 
-        configs etc based on the C:\weekly.local directory
+        configs etc based on the C:\weekly.local ==> mgtd.local directory
 
 had 3 directories
     production

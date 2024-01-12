@@ -3,6 +3,9 @@
 #print('test_defs.py !!')
 
 test_commands = [
+    'start @130 fromcb',
+    'list activity',
+    'die'
     'sleep @249  plus 10| sleep text',
     'cont @249 | cont text',
     'list html',
