@@ -16,7 +16,7 @@ import os
 import time
 from src import defs
 if  defs.mode != 'prod':
-    from test_weekly import test_defs
+    from test_mgtd import test_defs
 
 import logging
 c_logger = logging.getLogger(__name__)
@@ -41,6 +41,7 @@ try:
     else:
         lenm = 0
     mpos = 0
+
     while True:
     #for m in test_defs.test_commands:
         if defs.mode == 'socket':
@@ -50,7 +51,11 @@ try:
 
         #else:
         if defs.mode == 'prod':
-            m = input("Client say:\n")
+            if defs.auto_first_commands > 0 : # taking first auto commands
+                m = defs.auto_first_commands_list[defs.auto_first_commands-1]
+                defs.auto_first_commands -= 1
+            else: # regular mode
+                m = input("Client say:\n")
         # if m is just an empty line
         if not m.strip():
             #print("this is an empty line\n")

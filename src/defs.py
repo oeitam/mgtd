@@ -10,6 +10,9 @@ from datetime import datetime, timedelta #, date, time, timedelta
 mgtd_code_path  = r"C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd"
 mgtd_local_path = r"C:\mgtd.local"
 
+auto_first_commands_list = ['online'] # add more commands to have more commands automatically run (note - first command to execute is end of the list)
+auto_first_commands = len(auto_first_commands_list) # for one first command. if we want more - increase this number
+
 
 debug_delta = timedelta(days=0)
 

@@ -4,7 +4,7 @@
 
 import sys
 import time
-from test_weekly import test_defs
+from test_mgtd import test_defs
 from src import defs
 import logging
 #cd_logger = logging.getLogger(__name__)
@@ -22,7 +22,9 @@ class client(object):
     def operate(self): # testing. reads from test commands
         wait_for_user = 0
         cnt = 1
-        for m in test_defs.test_commands:
+        tl = test_defs.test_commands
+        tl.insert(0,'online')
+        for m in tl:
         #for m in test_defs.build_db:
             print(str(cnt).zfill(4) + ":" + m)
             cnt += 1
