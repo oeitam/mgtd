@@ -6,7 +6,6 @@ import pandas as pd
 import numpy as np
 import logging
 import re
-# TODO 
 import win32clipboard
 
 import io
