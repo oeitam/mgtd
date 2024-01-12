@@ -15,12 +15,12 @@ add:
  - ~~Done add color to the html (like open vs closed, already added for hierarchical)~~
  - ~~Done document all the commands~~
  - enable bulk priority [of a list of ids] some priorioty (bulk priority change)
- - add that when the server is dying, it will copy the local directory to the area that is being backed up in one-drive. keep prod/dev seperatelly and override old
+ - ~~Done, not exactly this way --> add that when the server is dying, it will copy the local directory to the area that is being backed up in one-drive. keep prod/dev seperatelly and override old~~
  - support bulk upload of commands from a txt file
  - add default sort and filter in the printing of DF - in regular list and in list html
  - ~~Done when listing a single item - still report in a table (unless want all fields) or list in a column (not a row)~~
  - when listing activity - for the project and task include first 2/3 words, not just the number
- - make sure all tags start with a lower case t and the rest is upper case like tTAG
+ - :make sure all tags start with a lower case t and the rest is upper case like tTAG, make sure all megaprojects are all capitals, projects are all lower case
  - when doing list tag - add a column for the type of the item (activity, task, etc)
  - add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'
  - ~~Done fix the comment printing in html by replacing after html~~ \
@@ -36,13 +36,14 @@ add:
  - ~~Done Note that when taking what is after the |, there is tendency (?) to take the space following the | ... need to remove it!~~
  - add ability to edit fields (some of them) like: edit @ID <column name> | new text
  - add ability to remove tag from all the database (like untagg tTODAY all)
- - add commnds that run at startup like - list html, online
- - consider running list html each time entering into the program
+ - ~~Done add commnds that run at startup like - list html, online~~
+ - ~~not needed (happens after each command) consider running list html each time entering into the program~~
  - ~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
  - the command "task states" created a task for some reason ... not good. fix
  - list all tags
  - when tagging - notify the user if the tag is new or existing
  - add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
+ - we have state transitions date and text. print them together (ither in list @ID or specially)
  - END
       
 
@@ -62,6 +63,13 @@ not implemented [swap, today, clean]
 need to have the following system variables\
 "mgdt_code_path" = "C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd"
 "mgdt_local_path" = "C:\mgtd.local"
+
+## more
+1. added ability to run commands before the client sends a first command in prod and in dev modes/
+the list of commands is in the defs.py file
+2. the files locations are parametrized in defs.py
+3. when exiting (die), the program zips the local directory (parametrized, but usually c:\mgtd.local) and stores it in the code location (parametrized as well) in a directory named 'datastore'. The zipped files are created with a time tag as the name. They are not stored in github.
+4. 
 
 ## Operation
 this describes points how I use it (Jan 2024)
