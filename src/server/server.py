@@ -67,6 +67,7 @@ class Server(object):
     def server_process(self):
         if defs.mode == 'direct': # used for testing, I think
             self.client.operate()
+            self.zip_data()
             return
         print('Starting the communications server')
         # Create a TCP/IP socket
