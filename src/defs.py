@@ -90,6 +90,11 @@ dfa_columns = ['State',
                'Comments',
                ]
 
+# columns that can be editted by edit id commands
+# megaprojects, projects
+dfm_editable_columns = ['Name', 'Description']
+dfp_dft_dfa_editable_columns = ['Description']
+
 all_col = { 'megaproject' : dfm_columns ,
             'project'     : dfp_columns ,
             'task'        : dft_columns ,

@@ -398,6 +398,7 @@ prefix("fromcb", 20)
 prefix("comment", 20)
 prefix("priority", 20)
 prefix("hier", 20)
+prefix("edit", 20)
 
 
 symbol(".", 120)
@@ -519,6 +520,10 @@ def nud(self):
         advance()
         if token.id != '(end)':
             gdb.priority_to_set = str(token.value)
+    elif gdb.transaction_type == "edit id":
+        gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action
+        advance()
+        gdb.edit_column_name = str(token.value)
 
     self.first = expression()
     return self
@@ -1024,5 +1029,13 @@ def nud(self):
     logger.debug("priority nud")
     # creating a project
     gdb.transaction_type = 'set priority' # this is the command type
+    self.second = expression() # this is moving forward
+    return self
+
+@method(symbol("edit"))
+def nud(self):
+    logger.debug("edit nud")
+    # creating a project
+    gdb.transaction_type = 'edit id' # this is the command type
     self.second = expression() # this is moving forward
     return self

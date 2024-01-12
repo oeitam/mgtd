@@ -166,6 +166,7 @@ class Db(object):
                                   'swap'               : self.swap,
                                   'add comment'        : self.add_comment,
                                   'set priority'       : self.set_priority,
+                                  'edit id'            : self.edit_item_field
                                   #'list project'       : self.list_project,
                                   #'list task'          : self.list_task,
                                   #'list activity'      : self.list_activity,
@@ -353,9 +354,11 @@ class Db(object):
             self.list_all               = 'clean'
             self.lastdays               = 'clean'
             self.fromcb                 = 'clean'
+            self.edit_column_name       = 'clean'
             #self.trans_description      = 'clean'
             self.comment_to_add         = 'clean'
             self.priority_to_set        = 'clean'
+            self.success_response       = 'clean'
             if self.substitution_happened[:4] != 'Simp': #handlinlg only simple substitutions for now. TODO
                 self.substitution_happened  = 'clean'
             if hasattr(defs,'list_resp_row_limit'):
@@ -478,7 +481,7 @@ class Db(object):
     def do_transaction(self):
         res = self.operation_bucket.get(self.transaction_type, self.had_error)()
         if res:
-            self.list_html()
+            self.list_html() #after each command operation - update the html files
         if res:
             res2 = self.save_databases()
             if res2:
@@ -489,13 +492,16 @@ class Db(object):
                 self.create_return_message(False)
         else:
             if self.error_details == 'clean':
-                self.had_error()
+                self.had_error('Variable error_details was not set')
             self.create_return_message(False)
         return True
 
     def had_error(self,err_text=''):
         logger.debug("in had_error. Houston - we have a problem!")
-        self.error_details = err_text
+        if err_text == '' : #nothing was sent
+            self.error_details = 'had_error function was called w/o error text. Could be - command name not find in bucket\n'
+        else:
+            self.error_details = err_text
         logger.debug(self.error_details)
         return False
 
@@ -529,8 +535,10 @@ class Db(object):
             else:
                 m = defs.help_message
         else:
-            if success:
-                m = "Transaction: {} COMPLETED. New ID is: {}".format(self.transaction_type, self.pID)
+            if success: #
+                if self.success_response == 'clean': # meaning - not set by command
+                    self.success_response = '' #must be empty to be used below
+                m = "Transaction: {} COMPLETED. New ID is: {} ({})".format(self.transaction_type, self.pID, self.success_response)
                 if self.return_message_ext1 != 'clean' or self.substitution_happened != 'clean':
                     if self.substitution_happened != 'clean':
                         m += self.substitution_happened
@@ -544,6 +552,10 @@ class Db(object):
     # transactions functions
     ########################
     def create_project(self):
+        # check project name is all lower
+        b1 = not self.project_name.islower() # true if not all lower case
+        if b1:
+            return self.had_error('Project name supplied must be all lower case and no spaces (format project_name)\n')
         # check if project exists
         if self.dfp is not None:
             if (self.project_name) in self.dfp[self.dfp['MEGAPROJECT'] == self.megaproject_name]['Name'].values: # search if the project name exists in the same megaproject
@@ -591,6 +603,10 @@ class Db(object):
             return False
 
     def create_megaproject(self):
+        # check megaproject name is all upper
+        b1 = not self.project_name.isupper() # true if not all lower case
+        if b1:
+            return self.had_error('Megaproject name supplied must be all upper case and no spaces (format MEGAPROJECT_MORE)\n')
         # check if project exists
         if self.dfm is not None:
             if (self.megaproject_name) in self.dfm['Name'].values:
@@ -1413,36 +1429,15 @@ class Db(object):
             f = open(r'C:\mgtd.local\mgtd.local.cfg', 'w')
             defs.config.write(f)
             f.close()
-        # copy_line = True
-        # did_delete = False
-        # temp_file = r'c:\temp\stamfile.txt'
-        # pat = '^\[replace_'+self.shortcut_to_delete+'\]'
-        # f = open(temp_file, 'w')
-        # with open(r'C:\mgtd.local\mgtd.local.cfg') as origin_file:
-        #     for line in origin_file:
-        #         if copy_line :
-        #             m = re.match(pat, line)
-        #             if m:
-        #                 copy_line = False
-        #                 did_delete = True
-        #             else:
-        #                 f.write(line)
-        #         else:
-        #             n = re.match('\[replace_\d+\]$', line) #check if a new section starts
-        #             if n:
-        #                 copy_line = True
-        #                 #f.write('\n')
-        #                 f.write(line)
-        #
-        # f.close()
-        # move(temp_file,r'C:\mgtd.local\mgtd.local.cfg')
-        # if not did_delete: # meaning - did not find the requested shortcut
-        #     self.had_error('Could not find the requested shortcut - number {}\n'\
-        #                    .format(self.shortcut_to_delete))
-        #     return False
         return True
 
     def tagging(self):
+        # check tag is correctly formatted - "tTAG", otherwise return false
+        b1 = self.tag[0].islower() # first (t) is lower case
+        b2 = self.tag[0] == 't' # first letter is t
+        b3 = self.tag[1:].isupper() # the rest is upper case
+        if (b1 or b2 or b3): #this is true when tag is incorrectly formatted in at least one of th eissues
+            return self.had_error('tag provided does not meet the formatting ctiteria tTAG\n')
         if self.transaction_type == 'tag something':
             # look for the item and set the tag
             found_in = 'nowhere'
@@ -1517,6 +1512,13 @@ class Db(object):
         return True
 
     def tagging_project(self):
+        # check tag is correctly formatted - "tTAG", otherwise return false
+        b1 = self.tag[0].islower() # first (t) is lower case
+        b2 = self.tag[0] == 't' # first letter is t
+        b3 = self.tag[1:].isupper() # the rest is upper case
+        if (b1 or b2 or b3): #this is true when tag is incorrectly formatted in at least one of th eissues
+            return self.had_error('tag provided does not meet the formatting ctiteria tTAG\n')
+
         # find the project
         if ((self.dfp is not None) and \
                     (self.item_to_tag_or_untag in list(self.dfp.Name))):
@@ -1886,3 +1888,16 @@ class Db(object):
         s = "\n".join(ls)
         return s
     
+    def edit_item_field(self):
+        # find where the id is
+        which_db = self.find_in_which_db(self.use_this_ID_for_ref)
+        if which_db == 'nowhere': #item not founf
+            return self.had_error('ID supplied is not found\n')
+        # check that the column name is really editable
+        if (which_db in ['dfm'] and self.edit_column_name not in defs.dfm_editable_columns) or \
+            (which_db in ['dfp', 'dft', 'dfa'] and self.edit_column_name not in defs.dfp_dft_dfa_editable_columns): # column name does not fit
+            return self.had_error('column name supplied does not match the record type editable columns for the ID given')
+        old_val = self.db_table[which_db].loc[self.use_this_ID_for_ref, self.edit_column_name]
+        self.db_table[which_db].loc[self.use_this_ID_for_ref, self.edit_column_name]= self.trans_description # replace the value
+        self.success_response = 'replaced column {} from {} to the supplied new value'.format(self.edit_column_name, old_val)
+        return True

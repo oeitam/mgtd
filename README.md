@@ -20,7 +20,7 @@ add:
  - add default sort and filter in the printing of DF - in regular list and in list html
  - ~~Done when listing a single item - still report in a table (unless want all fields) or list in a column (not a row)~~
  - when listing activity - for the project and task include first 2/3 words, not just the number
- - :make sure all tags start with a lower case t and the rest is upper case like tTAG, make sure all megaprojects are all capitals, projects are all lower case
+ - ~~Done make sure all tags start with a lower case t and the rest is upper case like tTAG, make sure all megaprojects are all capitals, projects are all lower case ~~
  - when doing list tag - add a column for the type of the item (activity, task, etc)
  - add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'
  - ~~Done fix the comment printing in html by replacing after html~~ \
@@ -34,7 +34,7 @@ add:
  - add ability to list for prioroity (like there is ability to list for state)
  - so when listing we can see things more clearly, limit the number of comment lines to a parameter (3? 4?) with ability also to see all comments (list ... allcomments ....)
  - ~~Done Note that when taking what is after the |, there is tendency (?) to take the space following the | ... need to remove it!~~
- - add ability to edit fields (some of them) like: edit @ID <column name> | new text
+ - ~~Done add ability to edit fields (some of them) like: edit @ID <column name> | new text~~
  - add ability to remove tag from all the database (like untagg tTODAY all)
  - ~~Done add commnds that run at startup like - list html, online~~
  - ~~not needed (happens after each command) consider running list html each time entering into the program~~
@@ -102,7 +102,7 @@ megaproject >> a group of projects that can hold projects related to same area -
 
 project >> create a project that belongs to a megaproject
 
-    create project P1 @MP1 tag some_tag | some comment about the project
+    create project P1 @MP1 tag tTAG | some comment about the project
 
 
 list >> create a list of IDs for bukl operation
@@ -173,8 +173,8 @@ list
  - html - craete an html file with all data\
     `list html`
  
- - tag >> list all items with tag 'some_tag'\
-    `list tag some_tag`
+ - tag >> list all items with tag tTAG'\
+    `list tag tTAG`
  - hier >> create a hierarchical list of all the items in the database\
 -Megaproject\
 --Project\
@@ -281,20 +281,29 @@ Note: need to keep the context correct (like move into an existing project and t
       move @10661 to test2
 
 ### tag
-tag with some no-spaces text
+tag with no-spaces in this format tTAG
 * does not allow for duplications per item
 * can tag a project by name. Task/activity by ID
 * can be used for context
 * multiple tags allowed
 * searchable (list tag command)
 ###
-    tag @1234 some_tag
-    untag @1234 some_tag
-    tag project progect_name some_tag
-    untag project progect_name some_tah
+    tag @1234 tTAG
+    untag @1234 tTAG
+    tag project progect_name tTAG
+    untag project progect_name tTAG
 
 see list tag
 
+### edit
+Allows to edit (== replace) fields for record/
+for megaproject - replace Name or Description
+for the rest - replace only Description
+
+        edit @ID Description | here enter the new description that will replace the former one
+        edit @ID Name | NEW_NAME 
+
+[Note: megaproject name is only upper case]
 
 ### timedelta
 The timedelta is a capadility to move the time base backword\

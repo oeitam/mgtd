@@ -23,7 +23,7 @@ class client(object):
         wait_for_user = 0
         cnt = 1
         tl = test_defs.test_commands
-        for comm in defs.auto_first_commands_list.reverse(): #since in prod is run last command first, here also
+        for comm in list(reversed(defs.auto_first_commands_list)): #since in prod is run last command first, here also
             tl.insert(0,comm)
         for m in tl:
         #for m in test_defs.build_db:
