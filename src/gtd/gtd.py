@@ -21,6 +21,7 @@ class Gtd(object):
     # to the proc/gtd for processing
     def take_data(self,data):
         print("the proc got this data: {}".format(data))
+        
         ############## just for the sake of testing ==> ability to take action random task/project for activity start
         if r"start @" in data:
             # get a list of task and project ids
@@ -99,8 +100,8 @@ class Gtd(object):
             r = randint(0,len(l5)-1)
             data = data.replace('00000000', str(l5[r]))#.zfill(8))
             logger.debug('command after replacement: {}'.format(data))
-
-        ############## just for the sake of testing
+        ############## just for the sake of testing (end of section)
+        
         self.current_data = data
         logger.debug('stored new data:{}'.format(self.current_data))
         return True
@@ -399,6 +400,7 @@ prefix("comment", 20)
 prefix("priority", 20)
 prefix("hier", 20)
 prefix("edit", 20)
+prefix("import", 20)
 
 
 symbol(".", 120)
@@ -1035,7 +1037,14 @@ def nud(self):
 @method(symbol("edit"))
 def nud(self):
     logger.debug("edit nud")
-    # creating a project
     gdb.transaction_type = 'edit id' # this is the command type
+    self.second = expression() # this is moving forward
+    return self
+
+@method(symbol("import"))
+def nud(self):
+    logger.debug("import nud")
+    # creating a project
+    gdb.transaction_type = 'import file' # this is the command type
     self.second = expression() # this is moving forward
     return self

@@ -32,6 +32,7 @@ class client(object):
             if (defs.die_word in m[0:5]):
                 print('client: got a die command', file=sys.stdout)
                 break
+            #check if command is 'import' and iterate over the file, calling each like teh else below
             if "turn on" in m[0:9]:
                 wait_for_user = 1
             else:

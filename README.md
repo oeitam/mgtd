@@ -16,7 +16,7 @@ add:
  - ~~Done document all the commands~~
  - enable bulk priority [of a list of ids] some priorioty (bulk priority change)
  - ~~Done, not exactly this way --> add that when the server is dying, it will copy the local directory to the area that is being backed up in one-drive. keep prod/dev seperatelly and override old~~
- - support bulk upload of commands from a txt file
+ - \\/support bulk upload of commands from a txt file
  - add default sort and filter in the printing of DF - in regular list and in list html
  - ~~Done when listing a single item - still report in a table (unless want all fields) or list in a column (not a row)~~
  - when listing activity - for the project and task include first 2/3 words, not just the number
@@ -44,6 +44,7 @@ add:
  - when tagging - notify the user if the tag is new or existing
  - add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
  - we have state transitions date and text. print them together (ither in list @ID or specially)
+ - add function what just searches the database for a word and returns all items with this word
  - END
       
 
@@ -72,8 +73,11 @@ the list of commands is in the defs.py file
 4. 
 
 ## Operation
-this describes points how I use it (Jan 2024)
-* 
+this describes points how I use it (Jan 2024)\
+in powershell (wt) console:
+
+        PS C:\mgtd.local> & powershell.exe '.\mgtd_wt.ps1'
+
 
 ## tags
 - tEMAIL >> context is email. will try and put some hints in the description
@@ -279,7 +283,8 @@ Note: need to keep the context correct (like move into an existing project and t
       create list @10661 @10662 @10672
       move list to test2
       move @10661 to test2
-
+Notes:
+ - when moving, it does not update activity dfa column "Project" with the project number, but rather with project name (fix) ?
 ### tag
 tag with no-spaces in this format tTAG
 * does not allow for duplications per item
@@ -304,6 +309,15 @@ for the rest - replace only Description
         edit @ID Name | NEW_NAME 
 
 [Note: megaproject name is only upper case]
+
+
+### import (not implemented)
+import is a single word command\
+it takes the file in mgdt_local_path/import_commands.txt\
+and executes each line as if it was a command by the client\
+remarks (only as teh first char in a line) is marked by # \
+empty lines are ignored
+
 
 ### timedelta
 The timedelta is a capadility to move the time base backword\

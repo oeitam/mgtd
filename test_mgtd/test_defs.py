@@ -3,12 +3,13 @@
 #print('test_defs.py !!')
 
 test_commands = [
+    'import',
     #'start @130 fromcb',
     #'create megaproject AAAA',
     #'create project bbb @AAAA',
     #'task @106 | bla lba bla',
-    'edit @104 Description | some new description',
-    'list @104',
+    #'edit @104 Description | some new description',
+    #'list @104',
     'die',
     'sleep @249  plus 10| sleep text',
     'cont @249 | cont text',

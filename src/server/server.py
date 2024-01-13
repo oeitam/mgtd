@@ -39,8 +39,8 @@ class Server(object):
         self.client_process = pc
 
 
-    def command(self, data):
-        a, b, data = data.partition(':')
+    def command(self, ldata):
+        a, b, data = ldata.partition(':')
         self.gtd.take_data(data)
         if self.gtd.process():  # gtd to process the latest data it recieved
             return_message = self.gtd.get_message_back_to_client()
@@ -104,6 +104,7 @@ class Server(object):
                         #raise
                         break
                     if data:
+                        #check here if the data is 'import' -> execute the file over teh code below
                         print('sending data to the proc', file=sys.stderr)
                         # remove the length of data from the top of the string
                         a,b,data = data.decode().partition(':')

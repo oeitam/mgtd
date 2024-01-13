@@ -166,7 +166,8 @@ class Db(object):
                                   'swap'               : self.swap,
                                   'add comment'        : self.add_comment,
                                   'set priority'       : self.set_priority,
-                                  'edit id'            : self.edit_item_field
+                                  'edit id'            : self.edit_item_field,
+                                  'import file'             : self.import_file,    
                                   #'list project'       : self.list_project,
                                   #'list task'          : self.list_task,
                                   #'list activity'      : self.list_activity,
@@ -1320,6 +1321,7 @@ class Db(object):
                              & (self.dft['State'] == self.state_to_list) \
                     , 'PROJECT'] = self.move_to
         elif self.transaction_type == 'move activity':
+            # move_to_id = 1 
             self.dfa.loc[self.dfa['PROJECT'] == self.move_from,'PROJECT'] = self.move_to
             if self.state_to_list == 'clean':
                 self.dfa.loc[self.dft['PROJECT'] == self.move_from, 'PROJECT'] \
@@ -1901,3 +1903,8 @@ class Db(object):
         self.db_table[which_db].loc[self.use_this_ID_for_ref, self.edit_column_name]= self.trans_description # replace the value
         self.success_response = 'replaced column {} from {} to the supplied new value'.format(self.edit_column_name, old_val)
         return True
+
+    def import_file(self):
+        print('in import. not implemented\n')
+
+
