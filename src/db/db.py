@@ -1210,7 +1210,7 @@ class Db(object):
 
     # print out wakeup tasks and activities
     def list_wakeup(self):
-        self.list_resp = 'Searching for TASK and ACTIVITY in Dormant state what Wakeup time is this week or past{}:\n'
+        self.list_resp = 'Searching for TASK and ACTIVITY in Dormant state what Wakeup time is this week or past{}:\n\n'
         for df_name in ['dft', 'dfa']:
             #self.list_resp += "\nResults from {}\n".format(defs.db_names[df_name])
             title = "Results from {}".format(defs.db_names[df_name])
@@ -1238,6 +1238,24 @@ class Db(object):
                     self.list_resp += '\n\n'
         return True
 
+    def list_halted(self):
+        if self.list_resp == 'clean':
+            self.list_resp = 'Searching for PROJECT, TASK and ACTIVITY in OnHold state:\n\n'
+        else:
+            self.list_resp += '==========================\n'
+            self.list_resp += '\nSearching for PROJECT, TASK and ACTIVITY in OnHold state:\n\n'
+        for df_name in ['dfp', 'dft', 'dfa']:
+            #self.list_resp += "\nResults from {}\n".format(defs.db_names[df_name])
+            title = "Results from {}".format(defs.db_names[df_name])
+            df = self.db_table[df_name]
+            df1 = df[df['State'] == 'OnHold']
+            if len(df1) == 0: # nothing found
+                self.list_resp += 'well ... nothing found here at {}.\n'.\
+                    format(defs.db_names[df_name])
+            else:
+                self.list_resp += self.df_to_list_resp(df1, df_name,title)
+                self.list_resp += '\n\n'
+        return True
    
     def delete_id(self):
         found = 0
@@ -1280,6 +1298,7 @@ class Db(object):
             self.return_message_ext1 += '{:12} {:4} {:4} {:8} has {:4} records\n'.format('Activity', 'db', 'is', 'online', len(self.dfa))
         else:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8}\n'.format('Activity', 'db', 'is', 'None')
+        self.return_message_ext1 += 'Total number of items is {}\n'.format(len(self.dfm)+len(self.dfp)+len(self.dft)+len(self.dfa))
         cid = self.get_current_ID()
         lstr = "The ID in file is: {}\n".format(cid)
         self.return_message_ext1     += lstr
@@ -1290,6 +1309,7 @@ class Db(object):
         # list of wake ups, and add into the return message
         self.return_message_ext1 += '==========================\n'
         self.list_wakeup()
+        self.list_halted()
         self.return_message_ext1 += self.list_resp
         self.return_message_ext1 += '==========================\n'
         # timedelta status
@@ -1748,13 +1768,8 @@ class Db(object):
                     ll = [index, '', '', '','Activity', namesub, row['State'], lid, parent_rec, row['Description']] 
                     d = pd.DataFrame(dict(zip(cols, ll)), index=[cnt])
                     cnt += 1                        
-                    lcnt = 1 
+                    lcnt = 1
                     for i in rowslist:
-                        #if i['ID'].values[0] == lid: # found in location lcnt
-                        #    # now - push after the last activity in a streak (watch for end of rows!)
-                        #    for j in range(1,len(rowlist)-lcnt):
-                        #        if rowslist[j]['Type4'] != 'Activity': #insert here, else - check next one
-                        #            break
                         if i['ID'].values[0] == lid: # found in location lcnt
                             break
                         lcnt += 1
@@ -1819,7 +1834,7 @@ class Db(object):
             'OPEN'    : '#D5F5E3',
             'CLOSED'  : '#5D6D7E',
             'DORMANT' : '#76448A',
-            'HALTED'  : '#FBEEE6'
+            'HALTED'  : '#A569BD'
         }
         hcolors = { 
             'MEGAPROJECT' : { 0 : '#B31E00', 1 : '#FF5500'} ,
