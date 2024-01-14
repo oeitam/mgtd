@@ -360,6 +360,7 @@ infix_r("|",30)
 prefix("start", 20)
 prefix("cont", 20)
 prefix("stop", 20)
+prefix("close", 20)
 prefix("halt", 20)
 prefix("list", 20)
 prefix("field", 20)
@@ -561,6 +562,13 @@ def nud(self):
 @method(symbol("stop"))
 def nud(self):
     logger.debug('stop nud')
+    gdb.transaction_is('stop something')
+    self.second = expression()
+    return self
+
+@method(symbol("close"))
+def nud(self):
+    logger.debug('close nud')
     gdb.transaction_is('stop something')
     self.second = expression()
     return self

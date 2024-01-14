@@ -133,12 +133,12 @@ moves **activity** or **task** wakeup time\
       sleep @11540 17ww50.Sun
       sleep @10673 plus 99
 
-### stop
+### stop, close
 stop >> puts an item into terminal state: Activity to state Ended, Task to state Closed, Project to state Ended\
 update the relevant fields.
 
       stop @some_id
-
+Can use the term 'close' in exactly the same manner
 
 ### cont
 cont >> moves an item to active state\
