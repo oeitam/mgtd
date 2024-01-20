@@ -605,7 +605,7 @@ class Db(object):
 
     def create_megaproject(self):
         # check megaproject name is all upper
-        b1 = not self.project_name.isupper() # true if not all lower case
+        b1 = not self.megaproject_name.isupper() # true if not all lower case
         if b1:
             return self.had_error('Megaproject name supplied must be all upper case and no spaces (format MEGAPROJECT_MORE)\n')
         # check if project exists
@@ -1694,6 +1694,7 @@ class Db(object):
         return True
 
     def list_html(self):
+        # top part
         s = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y") + '  <br>'
         total = 0
         per_db_total = {}
@@ -1701,6 +1702,7 @@ class Db(object):
             per_db_total[i] = len(self.db_table[i])
             total += per_db_total[i]
         s += f'Total number of items in the database is {total}.<br>'
+        ##
         if True: # implementing list html hierarchical
             # create a dataframe to store
             # estimate the number of items
@@ -1774,17 +1776,68 @@ class Db(object):
                             break
                         lcnt += 1
                     rowslist.insert(lcnt,d)
+            # building final dataframe
             dd = pd.concat(rowslist)
             dd.reset_index(inplace=True) # reindexes 0 to len(dd)
             dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')
             s1 = s
             s1 += dd.to_html(#formatters={'Comments': print_a_list}, 
                             justify='left')
+            #coloring
             s11 = self.add_color_to_hierarchical_html(s1)
             file = open(defs.mgtd_local_path + r'/{}/list_html_{}_hier.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s11)
             file.close()            
+        # preparing collapsable
+        if True:
+            scolap = defs.head
+            scolap += f'<body>\n<h3>\n{s}\n</h3>\n\n'
+            start = 0
+            last = 0
+            mp_name = rowslist[start]['Name'].values[0]
+            for i in range(1,len(rowslist)):
+                # assume the first one is a megaproject, so starting from 1
+                if rowslist[i]['Type1'].values[0] != 'Megaproject':
+                    continue
+                else:
+                    last = i
+                    scolap += f'<button type="button" class="collapsible">{mp_name}</button>\n<div class="content">'
+                    if start == last: #megaproject with no projects in it
+                        dd = pd.DataFrame(rowslist[start])
+                    else:
+                        dd = pd.concat(rowslist[start:last])
+                    dd.reset_index(inplace=True) # reindexes 0 to len(dd)
+                    dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')
+                    sc = dd.to_html(#formatters={'Comments': print_a_list}, 
+                            justify='left')
+                    #coloring
+                    sc1 = self.add_color_to_hierarchical_html(sc)
+                    scolap += sc1
+                    scolap += '</div>\n'
+                    start = i
+                    mp_name = rowslist[i]['Name'].values[0] # for the next megaproject
+            # after the for loop, still need to add the last megaproject
+            last = len(rowslist)
+            scolap += f'<button type="button" class="collapsible">{mp_name}</button>\n<div class="content">'
+            dd = pd.concat(rowslist[start:last])
+            dd.reset_index(inplace=True) # reindexes 0 to len(dd)
+            dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')
+            sc = dd.to_html(#formatters={'Comments': print_a_list}, 
+                    justify='left')
+            #coloring
+            sc1 = self.add_color_to_hierarchical_html(sc)
+            scolap += sc1
+            scolap += '</div>\n'
+            start = i
+                    
+            scolap += defs.script
+            scolap += '</body>'
+            file = open(defs.mgtd_local_path + r'/{}/list_html_{}_hier_collaps.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
+            file.write(scolap)
+            file.close()            
+        
 
+        #preparing regular full file# 
         if True:
             s2 = s
             for db in ['dfm', 'dfp', 'dft', 'dfa'] :
