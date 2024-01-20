@@ -457,7 +457,7 @@ head = \
   cursor: pointer;
   padding: 18px;
   width: 100%;
-  border: none;
+  border: 1px solid black;
   text-align: left;
   outline: none;
   font-size: 15px;

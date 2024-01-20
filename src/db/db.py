@@ -1815,7 +1815,8 @@ class Db(object):
                     continue
                 else:
                     last = i
-                    scolap += f'<button type="button" class="collapsible">{mp_name} [{last-start-1}]</button>\n<div class="content">'
+                    g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
+                    scolap += f'<button type="button" class="collapsible">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
                     if start == last: #megaproject with no projects in it
                         dd = pd.DataFrame(rowslist[start])
                     else:
