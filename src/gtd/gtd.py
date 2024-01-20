@@ -640,6 +640,7 @@ def nud(self):
             # it in other places)
             if gdb.tag == 'any-tag-at-all':
                 raise ValueError("Illegal tag value")
+            
     elif token.id == 'list':
         gdb.transaction_is('list list')
         gdb.keep_context = True

@@ -388,6 +388,7 @@ help_message = '''
 64   tag project UNIQUE tag_for_proj_one
 65   list tag tag_for_proj_one
 66   list tag
+66.1 list tag alltags [all the tag words that exist in the system]
 67   tag list TAG_FOR_LIST
 68   list task tag tag_for_proj_one
 69   list activity tag tag_for_proj_one
@@ -413,6 +414,11 @@ help_message = '''
 88   sleep @14512 plus 88 | sleep text
 89   comment @136 | bla bla bla bla
 90   priority @133 High
+91   edit @596 Description | 2024 (Jan) CPSV TL nomination process
+92   close @1234 | closure note (== stop)
+93   list html
+
+
 
 
 ==================================

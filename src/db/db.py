@@ -167,7 +167,7 @@ class Db(object):
                                   'add comment'        : self.add_comment,
                                   'set priority'       : self.set_priority,
                                   'edit id'            : self.edit_item_field,
-                                  'import file'             : self.import_file,    
+                                  'import file'        : self.import_file,    
                                   #'list project'       : self.list_project,
                                   #'list task'          : self.list_task,
                                   #'list activity'      : self.list_activity,
@@ -1578,39 +1578,49 @@ class Db(object):
         return True
 
     def list_tag(self):
-        if self.tag == 'clean':
-            self.tag = 'any-tag-at-all'
-            # search for the tag in project
-            df_proj = self.dfp[self.dfp['Tag'].apply(if_list_and_not_empty) == True]
-            # search for the tag in project
-            df_task = self.dft[self.dft['Tag'].apply(if_list_and_not_empty) == True]
-            # search for the tag in project
-            df_act  = self.dfa[self.dfa['Tag'].apply(if_list_and_not_empty) == True]
-        else: # listing for a certain tag
-            # search for the tag in project
-            df_proj = self.dfp[self.dfp['Tag'].apply(if_list_find_item, args=(self.tag,)) == True]
-            # search for the tag in project
-            df_task = self.dft[self.dft['Tag'].apply(if_list_find_item, args=(self.tag,)) == True]
-            # search for the tag in project
-            df_act  = self.dfa[self.dfa['Tag'].apply(if_list_find_item, args=(self.tag,)) == True]
+        # first check if tag is 'alltags' which is a special word (and illigal tag as does not follow tTAG format)
+        if self.tag == 'alltags': # whcih means - just return all the tags that we have
+            ll = []
+            for i in self.db_table.keys(): # all the db names
+                if i == 'dfm':
+                    continue
+                ll += [x for x in self.db_table[i]['Tag'] if x != []]
+            s = set([x for xs in ll for x in xs])
+            self.list_resp = f'The tags that exist in all teh database are: {s}\n'
+        else: 
+            if self.tag == 'clean':
+                self.tag = 'any-tag-at-all'
+                # search for the tag in project
+                df_proj = self.dfp[self.dfp['Tag'].apply(if_list_and_not_empty) == True]
+                # search for the tag in project
+                df_task = self.dft[self.dft['Tag'].apply(if_list_and_not_empty) == True]
+                # search for the tag in project
+                df_act  = self.dfa[self.dfa['Tag'].apply(if_list_and_not_empty) == True]
+            else: # listing for a certain tag
+                # search for the tag in project
+                df_proj = self.dfp[self.dfp['Tag'].apply(if_list_find_item, args=(self.tag,)) == True]
+                # search for the tag in project
+                df_task = self.dft[self.dft['Tag'].apply(if_list_find_item, args=(self.tag,)) == True]
+                # search for the tag in project
+                df_act  = self.dfa[self.dfa['Tag'].apply(if_list_find_item, args=(self.tag,)) == True]
 
-        # remove clean from the list response
-        self.list_resp = ""
-        if len(df_proj) > 0:
-            str1 = self.df_to_list_resp(df_proj, 'dfp', '*Projects with tag {}*'.\
-                                        format(self.tag))
-            self.list_resp += str1 # first, removing the 'clean'
-            self.list_resp += '\n\n'
-        if len(df_task) > 0:
-            str2 = self.df_to_list_resp(df_task, 'dft', '*Tasks with tag {}*'.\
-                                        format(self.tag))
-            self.list_resp += str2
-            self.list_resp += '\n\n'
-        if len(df_act) > 0:
-            str3 = self.df_to_list_resp(df_act, 'dfa', '*Activities with tag {}*'.\
-                                        format(self.tag))
-            self.list_resp += str3
-            self.list_resp += '\n\n'
+            # remove clean from the list response
+            self.list_resp = ""
+            if len(df_proj) > 0:
+                str1 = self.df_to_list_resp(df_proj, 'dfp', '*Projects with tag {}*'.\
+                                            format(self.tag))
+                self.list_resp += str1 # first, removing the 'clean'
+                self.list_resp += '\n\n'
+            if len(df_task) > 0:
+                str2 = self.df_to_list_resp(df_task, 'dft', '*Tasks with tag {}*'.\
+                                            format(self.tag))
+                self.list_resp += str2
+                self.list_resp += '\n\n'
+            if len(df_act) > 0:
+                str3 = self.df_to_list_resp(df_act, 'dfa', '*Activities with tag {}*'.\
+                                            format(self.tag))
+                self.list_resp += str3
+                self.list_resp += '\n\n'
 
         if len(self.list_resp) == 0 :
             self.error_details = 'Nothing to list since no items with tag {} found'.\

@@ -7,8 +7,6 @@ add:
  - ~~Done add priority to tasks, activities~~
  - ~~DOneDo not allow to create two projects with same name in one megaproject, no 2 megaprojects with same name~~
  - ~~Done make the adding from clip board work!!~~
- - search to TODO and fix
- - document all commands
  - ~~Done how to manag and control the location of the database (so it is backed up, for example, or based on parameter path)~~
  - document how to run in dev mode and production mode, direct and server modes
  - ~~Done print/html the database in hierarchy megaproject - its projects - task for each project~~
@@ -27,17 +25,17 @@ add:
  ~~generation - \n] for \<br>] , +++\n for +++\<br> , "\&lt;br\&gt;" for \<br> (need to identify for this the lines of comments and apply only on them)~~
  - find a way to load multy line things (as the terminal window supports only single line). perhaps the solution is the 'fromcb' option - from clipboard
  - ~~Done add to online - also the number of open projects, megaproject, tasks and activity (and priority)~~
+ - ~~Done Note that when taking what is after the |, there is tendency (?) to take the space following the | ... need to remove it!~~
+ - ~~Done add ability to edit fields (some of them) like: edit @ID <column name> | new text~~
+ - ~~Done add commnds that run at startup like - list html, online~~
+ - ~~not needed (happens after each command) consider running list html each time entering into the program~~
  - the commend "sleep @136 1" put 1 as wakeup time. Need to check for correct syntax on wakeup time
  - add to task printing also the megaproject it belongs to. One implementation is to do that just for printing. Another implementaiton is to add a column, but then need to take care of this also when doing a move to a task
  - check how the move command works (before changes) and document
  - add list task and activity under project xxx or list project and task and activity under megaproject xxx
  - add ability to list for prioroity (like there is ability to list for state)
  - so when listing we can see things more clearly, limit the number of comment lines to a parameter (3? 4?) with ability also to see all comments (list ... allcomments ....)
- - ~~Done Note that when taking what is after the |, there is tendency (?) to take the space following the | ... need to remove it!~~
- - ~~Done add ability to edit fields (some of them) like: edit @ID <column name> | new text~~
  - add ability to remove tag from all the database (like untagg tTODAY all)
- - ~~Done add commnds that run at startup like - list html, online~~
- - ~~not needed (happens after each command) consider running list html each time entering into the program~~
  - ~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
  - the command "task states" created a task for some reason ... not good. fix
  - list all tags
@@ -52,6 +50,8 @@ add:
  - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
 project that is dormant all tasks and activities cannot be open or onhold, etc.
  - s
+ - search to TODO and fix
+ - document all commands
  - END
       
 
