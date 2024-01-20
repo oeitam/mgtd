@@ -1284,22 +1284,22 @@ class Db(object):
         self.return_message_ext1 += '==============\n'
         if self.dfm is not None:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8} has {:4} records {}\n'.format('Megaproject', 'db', 'is', 'online', len(self.dfm), \
-                {y: len(self.dfm[self.dfm['State'] == y]) for y in list(defs.megaproject_states.keys())})
+                {y: len(self.dfm[self.dfm['State'] == y]) for y in list(defs.megaproject_states.keys())}) # dctionary with number of each state in the database
         else:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8}\n'.format('Megaproject', 'db', 'is', 'None')
         if self.dfp is not None:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8} has {:4} records {}\n'.format('Project', 'db', 'is', 'online', len(self.dfp), \
-                {y: len(self.dfp[self.dfp['State'] == y]) for y in list(defs.project_states.keys())})
+                {y: len(self.dfp[self.dfp['State'] == y]) for y in list(defs.project_states.keys())}) # dctionary with number of each state in the database
         else:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8}\n'.format('Project', 'db', 'is', 'None')
         if self.dft is not None:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8} has {:4} records {}\n'.format('Task', 'db', 'is', 'online', len(self.dft), \
-                {y: len(self.dft[self.dft['State'] == y]) for y in list(defs.task_states.keys())})
+                {y: len(self.dft[self.dft['State'] == y]) for y in list(defs.task_states.keys())}) # dctionary with number of each state in the database
         else:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8}\n'.format('Task', 'db', 'is', 'None')
         if self.dfa is not None:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8} has {:4} records {}\n'.format('Activity', 'db', 'is', 'online', len(self.dfa), \
-                {y: len(self.dfa[self.dfa['State'] == y]) for y in list(defs.activity_states.keys())})
+                {y: len(self.dfa[self.dfa['State'] == y]) for y in list(defs.activity_states.keys())}) # dctionary with number of each state in the database
         else:
             self.return_message_ext1 += '{:12} {:4} {:4} {:8}\n'.format('Activity', 'db', 'is', 'None')
         self.return_message_ext1 += 'Total number of items is {}\n'.format(len(self.dfm)+len(self.dfp)+len(self.dft)+len(self.dfa))

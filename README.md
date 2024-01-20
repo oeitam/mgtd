@@ -49,6 +49,9 @@ add:
  - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
  - when doing edit to the name of a megaproject, need to go and replace this name for projects in their records
  - and also - support move command for projects from one megaproject to another
+ - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
+project that is dormant all tasks and activities cannot be open or onhold, etc.
+ - s
  - END
       
 
