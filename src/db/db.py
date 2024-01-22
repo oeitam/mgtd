@@ -1273,6 +1273,7 @@ class Db(object):
                 found = 1
                 logger.debug("found the ID in index of {}".format(df_name))
                 df.drop(self.use_this_ID_for_ref, inplace = True)
+                self.id2db.pop(self.use_this_ID_for_ref) # update the reference TODO: test this! untested
                 return True
         if found == 0 : #meaning - we did not find the id to delete
             self.had_error('Did not find the ID to delete ({}) in Task or Activity database. Note that project and megaproject cannot be deleted!\n'\
