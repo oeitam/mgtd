@@ -49,7 +49,8 @@ so when listing we can see things more clearly, limit the number of comment line
  - and also - support move command for projects from one megaproject to another
  - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
 project that is dormant all tasks and activities cannot be open or onhold, etc.
- - s
+ - add autometically that the system keeps the previous action @id (if there was one, otherwise -1). this will save tyoping in case of donig list @id, some action @id (same id)
+ - error - i cerated two projects named okr and it failed (took them!)
  - search to TODO and fix
  - document all commands
  - END

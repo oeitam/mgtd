@@ -1833,7 +1833,8 @@ class Db(object):
                     mp_name = rowslist[i]['Name'].values[0] # for the next megaproject
             # after the for loop, still need to add the last megaproject
             last = len(rowslist)
-            scolap += f'<button type="button" class="collapsible">{mp_name} [{last-start-1}]</button>\n<div class="content">'
+            g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
+            scolap += f'<button type="button" class="collapsible">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
             dd = pd.concat(rowslist[start:last])
             dd.reset_index(inplace=True) # reindexes 0 to len(dd)
             dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')
