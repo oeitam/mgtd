@@ -121,7 +121,7 @@ class Db(object):
                          'dft': self.dft,
                          'dfa': self.dfa,
                          }
-
+        self.id2db = {}
         self.load_dbs()
         self.get_new_ID(1) # the 1 means this is the a setup - that is - check the file is here etc
         # create the operations_bucket
@@ -173,7 +173,7 @@ class Db(object):
                                   #'list activity'      : self.list_activity,
                                   }
 
-
+       
         logger.debug("class Db initialized")
 
     ###################################
@@ -268,6 +268,7 @@ class Db(object):
                                        })
             self.dfm.set_index('ID', inplace=True)
             self.db_table['dfm'] = self.dfm
+            self.id2db.update({x : 'dfm' for x in list(self.dfm.index)})
         else:
             self.dfm = None
         # proj
@@ -280,6 +281,7 @@ class Db(object):
                                        })
             self.dfp.set_index('ID', inplace=True)
             self.db_table['dfp'] = self.dfp
+            self.id2db.update({x : 'dfp' for x in list(self.dfp.index)})            
         else:
             self.dfp = None
         # task
@@ -294,6 +296,7 @@ class Db(object):
                                        })
             self.dft.set_index('ID', inplace=True)
             self.db_table['dft'] = self.dft
+            self.id2db.update({x : 'dft' for x in list(self.dft.index)})
         else:
             self.dft = None
         # activity
@@ -308,6 +311,7 @@ class Db(object):
                                        })
             self.dfa.set_index('ID', inplace=True)
             self.db_table['dfa'] = self.dfa
+            self.id2db.update({x : 'dfa' for x in list(self.dfa.index)})
         else:
             self.dfa = None
 
@@ -597,6 +601,7 @@ class Db(object):
             t1 = self.dfm['Name'][self.dfm['Name'] == self.megaproject_name].index
             self.dfm['PROJECTs_List'][t1[0]].append(self.project_name)
         if res:
+            self.id2db[pID]='dfp' #update id2db
             return True
         else:
             self.error_details = "Failed to add a new project {} to the database([])".format(self.project_name, self.pID)
@@ -631,6 +636,7 @@ class Db(object):
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
         self.add_to_db(which_db='dfm',df_to_add=ldf)
+        self.id2db[pID]='dfm' #update id2db
         return True
 
     # create a task
@@ -661,6 +667,7 @@ class Db(object):
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
         self.add_to_db(which_db='dft', df_to_add=ldf)
+        self.id2db[pID]='dft' #update id2db
         return True
 
     # craete an ACTIVITY
@@ -712,6 +719,7 @@ class Db(object):
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
         self.add_to_db(which_db='dfa', df_to_add=ldf)
+        self.id2db[pID]='dfa' #update id2db
         # FOR LATER TODO
         # add this activity to the projets or tasks list
         # for cross reference
@@ -1798,7 +1806,7 @@ class Db(object):
             s1 += dd.to_html(#formatters={'Comments': print_a_list}, 
                             justify='left')
             #coloring
-            s11 = self.add_color_to_hierarchical_html(s1)
+            s11 = self.add_color_to_hierarchical_html(s1,dd)
             file = open(defs.mgtd_local_path + r'/{}/list_html_{}_hier.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s11)
             file.close()            
@@ -1816,7 +1824,7 @@ class Db(object):
                 else:
                     last = i
                     g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
-                    scolap += f'<button type="button" class="collapsible">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
+                    scolap += f'<button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
                     if start == last: #megaproject with no projects in it
                         dd = pd.DataFrame(rowslist[start])
                     else:
@@ -1826,7 +1834,7 @@ class Db(object):
                     sc = dd.to_html(#formatters={'Comments': print_a_list}, 
                             justify='left')
                     #coloring
-                    sc1 = self.add_color_to_hierarchical_html(sc)
+                    sc1 = self.add_color_to_hierarchical_html(sc,dd)
                     scolap += sc1
                     scolap += '</div>\n'
                     start = i
@@ -1834,14 +1842,14 @@ class Db(object):
             # after the for loop, still need to add the last megaproject
             last = len(rowslist)
             g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
-            scolap += f'<button type="button" class="collapsible">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
+            scolap += f'<button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
             dd = pd.concat(rowslist[start:last])
             dd.reset_index(inplace=True) # reindexes 0 to len(dd)
             dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')
             sc = dd.to_html(#formatters={'Comments': print_a_list}, 
                     justify='left')
             #coloring
-            sc1 = self.add_color_to_hierarchical_html(sc)
+            sc1 = self.add_color_to_hierarchical_html(sc,dd)
             scolap += sc1
             scolap += '</div>\n'
             start = i
@@ -1884,7 +1892,7 @@ class Db(object):
 
 
 
-    def add_color_to_hierarchical_html(self, s):
+    def add_color_to_hierarchical_html(self, s, dd=None):
         # colors:1
         # MEGAPROJECT #B31E00 #FF5500
         # PROJECT #4D9900 #8CFF19
@@ -1911,6 +1919,11 @@ class Db(object):
             'TASK'        : { 0 : '#B3B300', 1 : '#FFFF33'} ,        
             'ACTIVITY'    : { 0 : '#0066CC', 1 : '#66B3FF'} 
         }
+        pcolors = { # colors for priority
+            'High'   : '#E74C3C',
+            'Medium' : '#F1C40F',
+            'Low'    : '#1ABC9C'
+        }
         Ms = 0 # megaproject state
         Ps = 0 # project state
         Ts = 0 # task state
@@ -1922,14 +1935,14 @@ class Db(object):
             # add color to the state column
             if any(x in ls[l] for x in match_open):
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['OPEN']))
-            if any(x in ls[l] for x in match_closed):
+            elif any(x in ls[l] for x in match_closed):
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['CLOSED']))
-            if any(x in ls[l] for x in match_dormant):
+            elif any(x in ls[l] for x in match_dormant):
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['DORMANT']))
-            if any(x in ls[l] for x in match_halted):
+            elif any(x in ls[l] for x in match_halted):
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['HALTED']))
             # take care of coloring megaproject/project/task/activity
-            if block > 0 : #we want to skip this line - to not miscolor something
+            if block > 0 : #we want to skip this line - to not miscolor something (activity)
                 block -= 1
                 continue
             if (ls[l].find('<td>Megaproject</td>')) > -1 : # found megaproject
@@ -1940,7 +1953,7 @@ class Db(object):
                 ls[l+2] = ls[l+2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
                 ls[l+3] = ls[l+3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
                 ls[l+4] = ls[l+4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-            if (ls[l].find('<td>Project</td>')) > -1 : # found project
+            elif (ls[l].find('<td>Project</td>')) > -1 : # found project
                 Ps = (Ps+1)%2 # flip color selector
                 last_type = 'PROJECT'
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
@@ -1948,23 +1961,38 @@ class Db(object):
                 ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
                 ls[l+2] = ls[l+2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
                 ls[l+3] = ls[l+3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-            if (ls[l].find('<td>Task</td>')) > -1 : # found task
+            elif (ls[l].find('<td>Task</td>')) > -1 : # found task
                 Ts = (Ts+1)%2 # flip color selector
                 last_type = 'TASK'
+                #color ID per priority
+                k1 = int(ls[l-3].split(">")[1].split('<')[0]) # this is the ID
+                k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
+                if k2 != 0.0 : # which is the case when priority is not empty
+                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
                 ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
                 ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
                 ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-            if (ls[l].find('<td>Activity</td>')) > -1 : # found activity
+            elif (ls[l].find('<td>Activity</td>')) > -1 : # found activity
                 As = (As+1)%2 # flip color selector
-                block = 4 # do not process next 4 lines
+                block = 4 # do not process next 4 lines as we might find the word 'project' or 'task' there
                 if last_type == 'TASK' or last_type == 'ACTIVITY-TASK':
+                    #color ID per priority
+                    k1 = int(ls[l-4].split(">")[1].split('<')[0]) # this is the ID
+                    k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
+                    if k2 != 0.0 : # which is the case when priority is not empty
+                        ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
                     ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['ACTIVITY'][As]))
                     ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
                     ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
                     ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
                     last_type = 'ACTIVITY-TASK'
                 else:
+                    #color ID per priority
+                    k1 = int(ls[l-4].split(">")[1].split('<')[0]) # this is the ID
+                    k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
+                    if k2 != 0.0 : # which is the case when priority is not empty
+                        ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
                     ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['ACTIVITY'][As]))
                     ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
                     ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))

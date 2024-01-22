@@ -33,6 +33,13 @@ days_of_week = {'Sun': '-0',
 die_word = 'die'
 
 
+# priorities
+priorities = {
+    1 : 'High',
+    2 : 'Medium',
+    3 : 'Low',
+}
+
 # columns definitions for the data bases
 # megaprojects
 dfm_columns = ['Name',
