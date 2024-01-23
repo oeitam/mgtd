@@ -1825,7 +1825,7 @@ class Db(object):
                 else:
                     last = i
                     g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
-                    scolap += f'<button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
+                    scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
                     if start == last: #megaproject with no projects in it
                         dd = pd.DataFrame(rowslist[start])
                     else:
@@ -1843,7 +1843,7 @@ class Db(object):
             # after the for loop, still need to add the last megaproject
             last = len(rowslist)
             g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
-            scolap += f'<button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
+            scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
             dd = pd.concat(rowslist[start:last])
             dd.reset_index(inplace=True) # reindexes 0 to len(dd)
             dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')
