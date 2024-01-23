@@ -1992,7 +1992,7 @@ class Db(object):
                     #color ID per priority
                     k1 = int(ls[l-4].split(">")[1].split('<')[0]) # this is the ID
                     k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
-                    if k2 != 0.0 : # which is the case when priority is not empty
+                    if k2 != 0.0 and k2 != '': # which is the case when priority is not empty
                         ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
                     ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['ACTIVITY'][As]))
                     ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
