@@ -51,6 +51,8 @@ so when listing we can see things more clearly, limit the number of comment line
 project that is dormant all tasks and activities cannot be open or onhold, etc.
  - add autometically that the system keeps the previous action @id (if there was one, otherwise -1). this will save tyoping in case of donig list @id, some action @id (same id)
  - error - i cerated two projects named okr and it failed (took them!)
+ - complete cid and lid. seems need to update cid with each call to get_id.
+ - check - do we really need to get a new id for every transaction, even if not really need a new ID? seems it makes progress for each all regardless. was that intended in the past?
  - search to TODO and fix
  - document all commands
  - END

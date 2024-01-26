@@ -450,6 +450,10 @@ def nud(self):
 @method(symbol("@"))
 def nud(self):
     logger.debug("@ nud")
+    if token.value == 'cid':
+        token.value = gdb.cid
+    if token.value == 'lid':
+        token.value = gdb.lid
     if gdb.transaction_type == "create project":
         gdb.set_megaproject_name(token.value)
         advance()  # to check what is beyond ..
@@ -458,7 +462,7 @@ def nud(self):
         advance()  # to check what is beyond ..
     elif gdb.transaction_type == 'start activity':
         # deal with the spacial case where token.value can be 'n'
-        gdb.use_this_ID_for_ref = token.value #int(token.value) #get the id to relate to the action
+        gdb.use_this_ID_for_ref = token.value #do not int(token.value) since supports @name also #get the id to relate to the action
         advance()
     elif gdb.transaction_type == "stop something":
         gdb.use_this_ID_for_ref = int(token.value) #get the id to relate to the action
@@ -640,7 +644,7 @@ def nud(self):
             # it in other places)
             if gdb.tag == 'any-tag-at-all':
                 raise ValueError("Illegal tag value")
-            
+
     elif token.id == 'list':
         gdb.transaction_is('list list')
         gdb.keep_context = True

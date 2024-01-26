@@ -319,9 +319,18 @@ class Db(object):
     # relevant 'self' variables to avoid information
     # form one transaction affecting the other transaction
     def clean_context(self, sec1=True, sec2=True, sec0 = False):
-        if sec0: #put here things that need to be initialized just once at the beginning
+        if sec0: #put here things that need to be initialized just once at the initialization
             self.substitution_happened = 'clean'
-        if sec1:
+            self.cid = -1 # cid - gets the current id - the id generated for teh transaction (new id)
+            self.lid = -1 # lid - last id - gets the id for reference for next time (like for start @id - would keep that id)
+            self.pID = -1 # must be initialized before cid ...
+            self.use_this_ID_for_ref    = -1 # same ... for lid
+        if sec2: # keep contxt of list between commands
+            self.items_list             = ['clean']
+        if sec1: #initialized every transaction
+            #self.cid = self.pID #holds the id from the previous transaction
+            #if self.use_this_ID_for_ref != -1:
+            #    self.lid = self.use_this_ID_for_ref
             self.pID                    = -1
             self.use_this_ID_for_ref    = -1
             self.second_ref_ID          = -1
@@ -371,7 +380,7 @@ class Db(object):
             else:
                 self.list_resp_row_limit    = 15
             self.list_resp_rows         = -1
-        if sec2:
+        if sec2: # keep contxt of list between commands
             self.items_list             = ['clean']
 
     def store_context(self):
@@ -486,9 +495,10 @@ class Db(object):
     def do_transaction(self):
         res = self.operation_bucket.get(self.transaction_type, self.had_error)()
         if res:
-            self.list_html() #after each command operation - update the html files
-        if res:
             res2 = self.save_databases()
+            self.list_html() #after each command operation - update the html files
+            self.cid = self.pID
+            self.lid = self.use_this_ID_for_ref
             if res2:
                 self.create_return_message(True)
             else:
@@ -497,14 +507,14 @@ class Db(object):
                 self.create_return_message(False)
         else:
             if self.error_details == 'clean':
-                self.had_error('Variable error_details was not set')
+                self.had_error('the error_details variable was not set')
             self.create_return_message(False)
         return True
 
     def had_error(self,err_text=''):
         logger.debug("in had_error. Houston - we have a problem!")
         if err_text == '' : #nothing was sent
-            self.error_details = 'had_error function was called w/o error text. Could be - command name not find in bucket\n'
+            self.error_details = 'had_error function was called w/o error text. Could be - command name not found in bucket\n'
         else:
             self.error_details = err_text
         logger.debug(self.error_details)
@@ -552,6 +562,7 @@ class Db(object):
             else:
                 m = "Transaction: {} FAILED with ERROR:\n {}".format(self.transaction_type, self.error_details)
         self.substitution_happened = 'clean' # need to wipe it here so it can 'pick up' the substitution value (and it does not retain this value next time ...)
+        m += f'\n>>> cid is [{self.cid}] and lid is [{self.lid}]\n' # add cid and lid for revery response back
         self.return_message = m
 
     # transactions functions
@@ -574,7 +585,6 @@ class Db(object):
                 logger.debug(self.error_details)
                 return False
 
-        pID = self.get_new_ID()
 
         if self.tag != 'clean': # we have a tag
             tag = [self.tag]
@@ -591,6 +601,7 @@ class Db(object):
                 win32clipboard.CloseClipboard()
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("%I:%M:%S%p on %B %d, %Y")
+        pID = self.get_new_ID()
         l = [self.project_name, 'Started', self.megaproject_name, self.trans_description,tag,today_adjusted_str,[],[],[]]
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfp_columns)
         ldf.index.name = 'ID'
@@ -621,7 +632,6 @@ class Db(object):
                 #self.error_details = ret
                 #temp return False TODO
         # regardless if the this is the first megaproject or not ...
-        pID = self.get_new_ID()
         # if fromcb was used, then need to compy clipbard into transaction description
         if self.fromcb == 'Yes':
             try:
@@ -632,6 +642,7 @@ class Db(object):
                 print("win32clipboard error: " + e)
                 win32clipboard.CloseClipboard()
         l = [self.megaproject_name, 'On', [], self.trans_description, []]
+        pID = self.get_new_ID()
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfm_columns)
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
@@ -642,8 +653,6 @@ class Db(object):
     # create a task
     # for now - no support for optional
     def create_task(self):
-        pID = self.get_new_ID()
-
         if self.tag != 'clean': # we have a tag
             tag = [self.tag]
         else:
@@ -663,6 +672,7 @@ class Db(object):
              self.project_name,tag,'',
              '','','','','',
              [],[],'',today_adjusted_str,[],[],[]]
+        pID = self.get_new_ID()
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dft_columns)
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
@@ -672,7 +682,6 @@ class Db(object):
 
     # craete an ACTIVITY
     def start_activity(self):
-        pID = self.get_new_ID()
         found_in = 'did not look yet ...'
         # search for the related task or project
         # if the use_this_ID_for_ref was actually given as a project name
@@ -715,6 +724,7 @@ class Db(object):
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("%I:%M:%S%p on %B %d, %Y")
         l = ['Started', self.get_time_str(date.today()), self.trans_description,tag, '',
              '', ''] + couple + [today_adjusted_str,[],[],[]]
+        pID = self.get_new_ID()
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfa_columns)
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
@@ -1329,6 +1339,8 @@ class Db(object):
         self.return_message_ext1 += 'Timedelta set to {} day(s) (back).\n'. \
             format(self.tdelta)
         self.return_message_ext1 += '==========================\n'
+        #self.return_message_ext1 += f'>>> cid is [{self.cid}] and lid is [{self.lid}]\n'
+        #self.return_message_ext1 += '==========================\n'
         return True
 
     def move_items(self):
@@ -1968,7 +1980,7 @@ class Db(object):
                 #color ID per priority
                 k1 = int(ls[l-3].split(">")[1].split('<')[0]) # this is the ID
                 k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
-                if k2 != 0.0 : # which is the case when priority is not empty
+                if k2 != 0.0 and k2 != '': # which is the case when priority is not empty
                     ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
                 ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
                 ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
@@ -1981,7 +1993,7 @@ class Db(object):
                     #color ID per priority
                     k1 = int(ls[l-4].split(">")[1].split('<')[0]) # this is the ID
                     k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
-                    if k2 != 0.0 : # which is the case when priority is not empty
+                    if k2 != 0.0 and k2 != '': # which is the case when priority is not empty
                         ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
                     ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['ACTIVITY'][As]))
                     ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
