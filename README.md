@@ -22,10 +22,14 @@ add:
  - ~~Done add commnds that run at startup like - list html, online~~
  - ~~not needed (happens after each command) consider running list html each time entering into the program~~
  - ~~Done list all tags~~
+ - ~~Done complete cid and lid. seems need to update cid with each call to get_id.~~
+ - ~~Done (already existed) - list search - add function what just searches the database for a word and returns all items with this word~~
+ - ~~ Checed - is OK - the rapid growth in ID is since every start of the app the number grows by one at init (w/o an item created) check - do we really need to get a new id for every transaction, even if not really need a new ID? seems it makes progress for each all regardless. was that intended in the past?~~
+ - ~~Done add autometically that the system keeps the previous action @id (if there was one, otherwise -1). this will save tyoping in case of donig list @id, some action @id (same id)~~
  - \\/support bulk upload of commands from a txt file
  - \\/enable bulk priority [of a list of ids] some priorioty (bulk priority change)
  - document how to run in dev mode and production mode, direct and server modes
- - add default sort and filter in the printing of DF - in regular list and in list html
+ - \\/add default sort and filter in the printing of DF - in regular list and in list html
  - \\/when listing activity - for the project and task include first 2/3 words, not just the number
  - \\/when doing list tag - add a column for the type of the item (activity, task, etc)
  - add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'
@@ -42,17 +46,13 @@ so when listing we can see things more clearly, limit the number of comment line
  - when tagging - notify the user if the tag is new or existing
  - \\/add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
  - \\/we have state transitions date and text. print them together (ither in list @ID or specially)
- - add function what just searches the database for a word and returns all items with this word
  - check - list wakeup supposed to return what has wakeup in teh past and this week. On Sunday it did not give anything ... on Monday - it showed what needs wakeup this week. So there is a shift of a day in 'what is this week'. Check.
  - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
  - when doing edit to the name of a megaproject, need to go and replace this name for projects in their records
  - and also - support move command for projects from one megaproject to another
  - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
-project that is dormant all tasks and activities cannot be open or onhold, etc.
- - add autometically that the system keeps the previous action @id (if there was one, otherwise -1). this will save tyoping in case of donig list @id, some action @id (same id)
+project that is dormant all tasks and activities cannot be open or onhold, etc. ~~also check no duplicate IDs ~~
  - error - i cerated two projects named okr and it failed (took them!)
- - complete cid and lid. seems need to update cid with each call to get_id.
- - check - do we really need to get a new id for every transaction, even if not really need a new ID? seems it makes progress for each all regardless. was that intended in the past?
  - search to TODO and fix
  - document all commands
  - END

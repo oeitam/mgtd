@@ -1339,8 +1339,12 @@ class Db(object):
         self.return_message_ext1 += 'Timedelta set to {} day(s) (back).\n'. \
             format(self.tdelta)
         self.return_message_ext1 += '==========================\n'
-        #self.return_message_ext1 += f'>>> cid is [{self.cid}] and lid is [{self.lid}]\n'
-        #self.return_message_ext1 += '==========================\n'
+        if (len(self.dfm)+len(self.dfp)+len(self.dft)+len(self.dfa)) == len(self.id2db): # if thre was a duplicate id, id2dn would be shorter)
+            self.return_message_ext1 += f'ID duplication check: implicitly checked - no duplication exists\n'
+        else:
+            self.had_error('Discrepancy between size of all dbs together and number of IDs in the system. May be a duplicate ID\n')
+            return False
+        self.return_message_ext1 += '==========================\n'
         return True
 
     def move_items(self):
@@ -1947,13 +1951,13 @@ class Db(object):
         for l in range(0,len(ls)):
             # add color to the state column
             if any(x in ls[l] for x in match_open):
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['OPEN']))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(scolors['OPEN']))
             elif any(x in ls[l] for x in match_closed):
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['CLOSED']))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(scolors['CLOSED']))
             elif any(x in ls[l] for x in match_dormant):
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['DORMANT']))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(scolors['DORMANT']))
             elif any(x in ls[l] for x in match_halted):
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(scolors['HALTED']))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(scolors['HALTED']))
             # take care of coloring megaproject/project/task/activity
             if block > 0 : #we want to skip this line - to not miscolor something (activity)
                 block -= 1
@@ -1961,19 +1965,19 @@ class Db(object):
             if (ls[l].find('<td>Megaproject</td>')) > -1 : # found megaproject
                 Ms = (Ms+1)%2 # flip color selector
                 last_type = 'MEGAPROJECT'
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-                ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-                ls[l+2] = ls[l+2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-                ls[l+3] = ls[l+3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-                ls[l+4] = ls[l+4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
+                ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
+                ls[l+2] = ls[l+2].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
+                ls[l+3] = ls[l+3].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
+                ls[l+4] = ls[l+4].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
             elif (ls[l].find('<td>Project</td>')) > -1 : # found project
                 Ps = (Ps+1)%2 # flip color selector
                 last_type = 'PROJECT'
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
-                ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                ls[l+2] = ls[l+2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                ls[l+3] = ls[l+3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
+                ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                ls[l+2] = ls[l+2].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                ls[l+3] = ls[l+3].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
             elif (ls[l].find('<td>Task</td>')) > -1 : # found task
                 Ts = (Ts+1)%2 # flip color selector
                 last_type = 'TASK'
@@ -1981,11 +1985,11 @@ class Db(object):
                 k1 = int(ls[l-3].split(">")[1].split('<')[0]) # this is the ID
                 k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
                 if k2 != 0.0 and k2 != '': # which is the case when priority is not empty
-                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
-                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
-                ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
-                ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
+                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}">'.format(pcolors[k2]))
+                ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['TASK'][Ts]))
+                ls[l+1] = ls[l+1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['TASK'][Ts]))
+                ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['MEGAPROJECT'][Ms]))
             elif (ls[l].find('<td>Activity</td>')) > -1 : # found activity
                 As = (As+1)%2 # flip color selector
                 block = 4 # do not process next 4 lines as we might find the word 'project' or 'task' there
@@ -1994,22 +1998,22 @@ class Db(object):
                     k1 = int(ls[l-4].split(">")[1].split('<')[0]) # this is the ID
                     k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
                     if k2 != 0.0 and k2 != '': # which is the case when priority is not empty
-                        ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
-                    ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['ACTIVITY'][As]))
-                    ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['TASK'][Ts]))
-                    ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
+                        ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}">'.format(pcolors[k2]))
+                    ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['ACTIVITY'][As]))
+                    ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['TASK'][Ts]))
+                    ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"><input type="checkbox">'.format(hcolors['MEGAPROJECT'][Ms])) # <td bgcolor="#FF5500"\><input type="checkbox"></td>
                     last_type = 'ACTIVITY-TASK'
                 else:
                     #color ID per priority
                     k1 = int(ls[l-4].split(">")[1].split('<')[0]) # this is the ID
                     k2 = np.nan_to_num(self.db_table[self.id2db[k1]].loc[k1,'Priority']) # this is the priority
                     if k2 != 0.0 and k2 != '': # which is the case when priority is not empty
-                        ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(pcolors[k2]))
-                    ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['ACTIVITY'][As]))
-                    ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                    ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['PROJECT'][Ps]))
-                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"\>'.format(hcolors['MEGAPROJECT'][Ms]))
+                        ls[l-4] = ls[l-4].replace('<td>','<td ' + 'bgcolor="{}">'.format(pcolors[k2]))
+                    ls[l] = ls[l].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['ACTIVITY'][As]))
+                    ls[l-1] = ls[l-1].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                    ls[l-2] = ls[l-2].replace('<td>','<td ' + 'bgcolor="{}">'.format(hcolors['PROJECT'][Ps]))
+                    ls[l-3] = ls[l-3].replace('<td>','<td ' + 'bgcolor="{}"><input type="checkbox">'.format(hcolors['MEGAPROJECT'][Ms]))
                     last_type = 'ACTIVITY-PROJECT'
 
         s = "\n".join(ls)

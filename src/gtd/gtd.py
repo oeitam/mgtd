@@ -614,7 +614,7 @@ def nud(self):
     elif token.value == 'search':
         gdb.transaction_is('list search')
         # wrap it up
-        self.second = expression()
+        #self.second = expression()
         return self
     elif token.value == 'wakeup':
         gdb.transaction_is('list wakeup')
