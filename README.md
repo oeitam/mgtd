@@ -47,6 +47,7 @@ so when listing we can see things more clearly, limit the number of comment line
  - \\/add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
  - \\/we have state transitions date and text. print them together (ither in list @ID or specially)
  - check - list wakeup supposed to return what has wakeup in teh past and this week. On Sunday it did not give anything ... on Monday - it showed what needs wakeup this week. So there is a shift of a day in 'what is this week'. Check.
+ - start @cid was not working after creating a task and the cid was that of the task. no specific issue returned
  - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
  - when doing edit to the name of a megaproject, need to go and replace this name for projects in their records
  - and also - support move command for projects from one megaproject to another

@@ -2023,7 +2023,7 @@ class Db(object):
         # find where the id is
         which_db = self.find_in_which_db(self.use_this_ID_for_ref)
         if which_db == 'nowhere': #item not founf
-            return self.had_error('ID supplied is not found\n')
+            return self.had_error('supplied ID is not found\n')
         # check that the column name is really editable
         if (which_db in ['dfm'] and self.edit_column_name not in defs.dfm_editable_columns) or \
             (which_db in ['dfp', 'dft', 'dfa'] and self.edit_column_name not in defs.dfp_dft_dfa_editable_columns): # column name does not fit
