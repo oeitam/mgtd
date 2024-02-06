@@ -466,6 +466,7 @@ class Db(object):
 
     # set the project name for the next transaction
     def set_project_name(self, project_name):
+        # TODO first check that dfp is valid, and then check if project name is number or string (and then check if the string exists)
         if project_name.isdigit():
             # look for the project 'verbal' name
             if self.dfp is not None:
@@ -476,6 +477,7 @@ class Db(object):
             else:
                 self.had_error('Project database does not exist.\n')
         else:
+            # check if project name exists TODO
             self.project_name = project_name
 
     # set the project name for the next transaction
@@ -496,7 +498,11 @@ class Db(object):
         res = self.operation_bucket.get(self.transaction_type, self.had_error)()
         if res:
             res2 = self.save_databases()
-            self.list_html() #after each command operation - update the html files
+            try: #since fails a lot, let us not hang on this
+                self.list_html() #after each command operation - update the html files
+            except:
+                print("Excepted in list_html")
+                pass
             self.cid = self.pID
             self.lid = self.use_this_ID_for_ref
             if res2:
@@ -653,6 +659,11 @@ class Db(object):
     # create a task
     # for now - no support for optional
     def create_task(self):
+        # check if self.project_name is a valid project
+        if self.project_name not in list(self.dfp['Name']) :
+            self.error_details = 'Project_name {} was not found in project list'.format(self.project_name)
+            logger.debug(self.error_details)
+            return False            
         if self.tag != 'clean': # we have a tag
             tag = [self.tag]
         else:
@@ -685,6 +696,10 @@ class Db(object):
         found_in = 'did not look yet ...'
         # search for the related task or project
         # if the use_this_ID_for_ref was actually given as a project name
+
+        # as this function assume use_this_ID_for_ref is a string, make it one (needed after we added cid and lid)
+        self.use_this_ID_for_ref = str(self.use_this_ID_for_ref)
+
         if not self.use_this_ID_for_ref.isdigit() : # it is not just digits
             num = int(self.dfp.index[self.dfp['Name'] == self.use_this_ID_for_ref].tolist()[0])
             if num is not None:
@@ -1762,7 +1777,8 @@ class Db(object):
             if self.dfp is not None:
                 lcnt = 1 
                 if True: #place holder to add check on if to list all or not all. default is do not print ended/closed/off items
-                    ldf = self.dfp[self.dfp['State'] != 'Ended']                       
+                    ldf = self.dfp[self.dfp['State'] != 'Ended']     
+                    ldf = ldf[::-1] #reversing the order, since every item is inserted in its place right after it meets its place in hierarchy. this causes order reversal, unless I reverse it in advacnce                  
                 for index, row in ldf.iterrows():
                     #print(index, row)
                     ll = [index, '', 'Project','','', row['Name'], row['State'], '-', '-', row['Description']] 
@@ -1778,6 +1794,7 @@ class Db(object):
             if self.dft is not None:
                 if True: #place holder to add check on if to list all or not all. default is do not print ended/closed/off items
                     ldf = self.dft[self.dft['State'] != 'Closed']                       
+                    ldf = ldf[::-1] #reversing the order, since every item is inserted in its place right after it meets its place in hierarchy. this causes order reversal, unless I reverse it in advacnce
                 for index, row in ldf.iterrows():
                     #print(index, row)
                     namesub = " ".join(row['Description'].split(" ")[:4]) # take first 4 words
@@ -1796,6 +1813,7 @@ class Db(object):
             if self.dfa is not None:
                 if True: #place holder to add check on if to list all or not all. default is do not print ended/closed/off items
                     ldf = self.dfa[self.dfa['State'] != 'Ended']                       
+                    ldf = ldf[::-1] #reversing the order, since every item is inserted in its place right after it meets its place in hierarchy. this causes order reversal, unless I reverse it in advacnce
                 for index, row in ldf.iterrows():
                     #print(index, row)
                     namesub = " ".join(row['Description'].split(" ")[:4]) # take first 4 words

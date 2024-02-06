@@ -26,6 +26,7 @@ add:
  - ~~Done (already existed) - list search - add function what just searches the database for a word and returns all items with this word~~
  - ~~ Checed - is OK - the rapid growth in ID is since every start of the app the number grows by one at init (w/o an item created) check - do we really need to get a new id for every transaction, even if not really need a new ID? seems it makes progress for each all regardless. was that intended in the past?~~
  - ~~Done add autometically that the system keeps the previous action @id (if there was one, otherwise -1). this will save tyoping in case of donig list @id, some action @id (same id)~~
+ - ~~Done start @cid was not working after creating a task and the cid was that of the task. no specific issue returned~~
  - \\/support bulk upload of commands from a txt file
  - \\/enable bulk priority [of a list of ids] some priorioty (bulk priority change)
  - document how to run in dev mode and production mode, direct and server modes
@@ -37,7 +38,7 @@ add:
  - ~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
  - the commend "sleep @136 1" put 1 as wakeup time. Need to check for correct syntax on wakeup time
  - \\/add to task printing also the megaproject it belongs to. One implementation is to do that just for printing. Another implementaiton is to add a column, but then need to take care of this also when doing a move to a task
- - check how the move command works (before changes) and document
+ - check how the move command works (before changes) and document or make useful
  - \\/add list task and activity under project xxx or list project and task and activity under megaproject xxx
  - add ability to list for prioroity (like there is ability to list for state)\ 
 so when listing we can see things more clearly, limit the number of comment lines to a parameter (3? 4?) with ability also to see all comments (list ... allcomments ....)
@@ -47,13 +48,15 @@ so when listing we can see things more clearly, limit the number of comment line
  - \\/add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
  - \\/we have state transitions date and text. print them together (ither in list @ID or specially)
  - check - list wakeup supposed to return what has wakeup in teh past and this week. On Sunday it did not give anything ... on Monday - it showed what needs wakeup this week. So there is a shift of a day in 'what is this week'. Check.
- - start @cid was not working after creating a task and the cid was that of the task. no specific issue returned
- - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
+  - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
  - when doing edit to the name of a megaproject, need to go and replace this name for projects in their records
  - and also - support move command for projects from one megaproject to another
  - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
 project that is dormant all tasks and activities cannot be open or onhold, etc. ~~also check no duplicate IDs ~~
+ - - check that all items that neeed a parent have a parent
+ - - check what have 'clean' for description or for parent
  - error - i cerated two projects named okr and it failed (took them!)
+ - check - task @[task_id] tag tEmail | bla bla bla failed, but still created a bad task 
  - search to TODO and fix
  - document all commands
  - END
