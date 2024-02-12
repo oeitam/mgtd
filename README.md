@@ -57,6 +57,9 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - - check what have 'clean' for description or for parent
  - error - i cerated two projects named okr and it failed (took them!)
  - check - task @[task_id] tag tEmail | bla bla bla failed, but still created a bad task 
+ - when doing sleep something - print out also the wakeup time set for the 'element'
+ - add check that the priority setting is indeed correctly spelled and if not - return an error
+ - add ability to set prioroity at creation  (like start @123 tag tXXX prio Yyyy)
  - search to TODO and fix
  - document all commands
  - END

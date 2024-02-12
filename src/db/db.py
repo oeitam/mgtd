@@ -1858,7 +1858,8 @@ class Db(object):
                     continue
                 else:
                     last = i
-                    g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
+                    # g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
+                    g = list(self.dfp[(self.dfp['MEGAPROJECT'] == mp_name) & (self.dfp['State'] != 'Ended')]['Name']) # not including ended projects
                     scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
                     if start == last: #megaproject with no projects in it
                         dd = pd.DataFrame(rowslist[start])
