@@ -404,6 +404,7 @@ help_message = '''
 72   list activity col Start_Date drange bot 17ww20 tag tag_for_proj_one
 72.1 list activity listall col Start_Date drange bot 17ww20 tag tag_for_proj_one
 73   task @project_one tag QQQ1| some task
+73.1 task @778 tag tTAG prio Low | delete me [example for task with priority setting. also for start command]
 74   start @13849 tag QQQ1 | some activity
 75   create project MYPROJ @Work1 tag QQQ1 | some proj desc
 76   timedelta
@@ -424,6 +425,7 @@ help_message = '''
 91   edit @596 Description | 2024 (Jan) CPSV TL nomination process
 92   close @1234 | closure note (== stop)
 93   list html
+
 
 
 
