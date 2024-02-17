@@ -608,7 +608,16 @@ class Db(object):
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("%I:%M:%S%p on %B %d, %Y")
         pID = self.get_new_ID()
-        l = [self.project_name, 'Started', self.megaproject_name, self.trans_description,tag,today_adjusted_str,[],[],[]]
+        l = [self.project_name, # Name
+             'Started', # State
+             self.megaproject_name, # MEGAPROJECT
+             self.trans_description, # Description
+             tag, # Tag
+             today_adjusted_str, # Start_Time
+             [], # State_Time
+             [], # State_Text
+             [] # Comments
+             ]
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfp_columns)
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
@@ -647,7 +656,12 @@ class Db(object):
             except TypeError as e:
                 print("win32clipboard error: " + e)
                 win32clipboard.CloseClipboard()
-        l = [self.megaproject_name, 'On', [], self.trans_description, []]
+        l = [self.megaproject_name, # Name
+             'On', # State
+             [], # PROJECTs_List
+             self.trans_description, # Description
+             [] # Comments
+             ]
         pID = self.get_new_ID()
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfm_columns)
         ldf.index.name = 'ID'
@@ -668,6 +682,10 @@ class Db(object):
             tag = [self.tag]
         else:
             tag = []
+        if self.priority_to_set != 'clean':
+            priority = self.priority_to_set
+        else:
+            priority = ''
         # if fromcb was used, then need to compy clipbard into transaction description
         if self.fromcb == 'Yes':
             try:
@@ -679,10 +697,25 @@ class Db(object):
                 win32clipboard.CloseClipboard()
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("(a) %I:%M:%S%p on %B %d, %Y")
-        l = ['Open', self.trans_description, self.get_time_str(date.today()),
-             self.project_name,tag,'',
-             '','','','','',
-             [],[],'',today_adjusted_str,[],[],[]]
+        l = ['Open', # State
+             self.trans_description, # Description
+             self.get_time_str(date.today()), # Start_Date
+             self.project_name, # PROJECT
+             tag, # Tag
+             priority, # Priority
+             '', # Due_Date
+             '', # Expiration_Date
+             '', # Wakeup_Date
+             '', # Location
+             '', # Context
+             [], # ACTIVITYs
+             [], # Sub_TASKs
+             '', # Parent_TASK
+             today_adjusted_str, # Start_Time
+             [], # State_Time
+             [], # State_Text
+             [] # Comments
+             ]
         pID = self.get_new_ID()
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dft_columns)
         ldf.index.name = 'ID'
@@ -726,6 +759,10 @@ class Db(object):
             tag = [self.tag]
         else:
             tag = []
+        if self.priority_to_set != 'clean':
+            priority = self.priority_to_set
+        else:
+            priority = ''
         # if fromcb was used, then need to compy clipbard into transaction description
         if self.fromcb == 'Yes':
             try:
@@ -737,8 +774,20 @@ class Db(object):
                 win32clipboard.CloseClipboard()
         today_str = datetime.now().strftime("%I:%M:%S%p on %B %d, %Y")
         today_adjusted_str = (datetime.now()-self.tdelta).strftime("%I:%M:%S%p on %B %d, %Y")
-        l = ['Started', self.get_time_str(date.today()), self.trans_description,tag, '',
-             '', ''] + couple + [today_adjusted_str,[],[],[]]
+        l = ['Started', # State
+             self.get_time_str(date.today()), # Start_Date
+             self.trans_description, # Description
+             tag, # Tag
+             priority, # Priority
+             '', # End_Date
+             '' # Wakeup_Date
+             # TASK , PROJECT
+             ] + couple + \
+            [today_adjusted_str, # Start_Time
+             [], # State_Time
+             [], # State_Text
+             [] # Comments
+             ]
         pID = self.get_new_ID()
         ldf = pd.DataFrame(data=[l], index=[pID], columns=defs.dfa_columns)
         ldf.index.name = 'ID'
@@ -1738,6 +1787,10 @@ class Db(object):
         return True
 
     def set_priority(self):
+        # check the priority is spelled correctly
+        if self.priority_to_set not in defs.priorities.values():
+            self.had_error(f"Priority term {self.priority_to_set} is unidentified")
+            return False
         # find the ID where it is
         which_db = self.find_in_which_db(self.use_this_ID_for_ref)
         if which_db in ['dfm', 'dfp']: #can set priority only to tasks and activities

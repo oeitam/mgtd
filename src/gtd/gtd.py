@@ -402,6 +402,8 @@ prefix("priority", 20)
 prefix("hier", 20)
 prefix("edit", 20)
 prefix("import", 20)
+prefix("prio", 20)
+
 
 
 symbol(".", 120)
@@ -1057,7 +1059,15 @@ def nud(self):
 @method(symbol("import"))
 def nud(self):
     logger.debug("import nud")
-    # creating a project
     gdb.transaction_type = 'import file' # this is the command type
     self.second = expression() # this is moving forward
     return self
+
+@method(symbol("prio"))
+def nud(self):
+    logger.debug("prio nud")
+    gdb.priority_to_set = token.value    
+    advance()
+    self.first = expression() # this is moving forward
+    return self
+

@@ -462,7 +462,7 @@ head = \
   background-color: #aaa;
   color: white;
   cursor: pointer;
-  padding: 18px;
+  padding: 8px;
   width: 100%;
   border: 1px solid black;
   text-align: left;
