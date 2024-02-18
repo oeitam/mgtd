@@ -28,6 +28,8 @@ add:
  - ~~Done add autometically that the system keeps the previous action @id (if there was one, otherwise -1). this will save tyoping in case of donig list @id, some action @id (same id)~~
  - ~~Done start @cid was not working after creating a task and the cid was that of the task. no specific issue returned~~
  - ~~Done add check that the priority setting is indeed correctly spelled and if not - return an error~~
+ - ~~Done add ability to set prioroity at creation  (like start @123 tag tXXX prio Yyyy)~~
+ - ~~Done enable priority in mid command (start @xxx prio High tag tSOMETAG) ~~
  - \\/support bulk upload of commands from a txt file
  - \\/enable bulk priority [of a list of ids] some priorioty (bulk priority change)
  - document how to run in dev mode and production mode, direct and server modes
@@ -59,10 +61,10 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - error - i cerated two projects named okr and it failed (took them!)
  - check - task @[task_id] tag tEmail | bla bla bla failed, but still created a bad task 
  - when doing sleep something - print out also the wakeup time set for the 'element'
- - add ability to set prioroity at creation  (like start @123 tag tXXX prio Yyyy)
  - remove dormant from online
  - make online wake up what is dormant and needs wake up (so I can remove dormant from my collaps and not care on them till wake up)
- - enable priority in mid command (start @xxx prio High tag tSOMETAG)
+ - add something like 'list all state Dotmant' or 'list all prio high' to list across databases all in that state.
+ - align state names across all databases. so when an item is active, it is state 'Open' for all (now some has On and Off) and also align on the name of 'OnHold'
  - search to TODO and fix
  - document all commands
  - END
