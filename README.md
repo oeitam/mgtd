@@ -65,6 +65,8 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - make online wake up what is dormant and needs wake up (so I can remove dormant from my collaps and not care on them till wake up)
  - add something like 'list all state Dotmant' or 'list all prio high' to list across databases all in that state.
  - align state names across all databases. so when an item is active, it is state 'Open' for all (now some has On and Off) and also align on the name of 'OnHold'
+ - remove the on hold items and the dormant items from the online report. can add online full command, to see all of the online items
+ - FIX: Client say: list 00000006:list Server Said: Transaction: start activity COMPLETED. New ID is: 808 () [seems has repeated what happened before it! did not really create a new one]
  - search to TODO and fix
  - document all commands
  - END

@@ -532,7 +532,10 @@ class Db(object):
             if success:
                 if self.substitution_happened != 'clean':
                     m = self.substitution_happened
-                m += self.list_resp
+                if self.list_resp == 'clean': # empty
+                    m += "Transaction: {} COMPLETED. Referenced ID is: {}".format(self.transaction_type, self.use_this_ID_for_ref)
+                else:
+                    m += self.list_resp
             else:
                 m = "Transaction: {} FAILED with ERROR:\n {}".format(self.transaction_type, self.error_details)
         elif ( 'stop some' in self.transaction_type
