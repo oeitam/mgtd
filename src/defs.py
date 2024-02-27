@@ -295,6 +295,10 @@ use_tables          = config['MAIN']['use_tables']
 max_width           = int(config['MAIN']['max_width'])
 list_resp_row_limit = int(config['MAIN']['list_resp_row_limit'])
 columns_print_style = abs(int(config['MAIN']['columns_print_style'] == 'partial') -1 ) # if partial - 0, if not - 1
+html_mark           = int(config['MAIN']['html_mark']) #expect to get an id of a megaproject and put a seperator button before it. 
+                                                       # So it is the 'next' one to process
+                                                       # -1 is not active (default)
+                                                       # TODO this parameter need to be sticky across runs
 
 params_dict = { 'use_tables'          : use_tables,
                 'max_width'           : max_width,
@@ -303,7 +307,7 @@ params_dict = { 'use_tables'          : use_tables,
                 }
 
 params_list = [ 'use_tables', 'max_width', 'list_resp_row_limit','dev_or_prod',
-                'columns_print_style']
+                'columns_print_style', 'html_mark' ]
 
 
 data_loc = data_loc + '\\' + dev_or_prod

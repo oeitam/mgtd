@@ -1912,7 +1912,7 @@ class Db(object):
                 # assume the first one is a megaproject, so starting from 1
                 if rowslist[i]['Type1'].values[0] != 'Megaproject':
                     continue
-                else:
+                else: # so this is a megaproject
                     last = i
                     # g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
                     g = list(self.dfp[(self.dfp['MEGAPROJECT'] == mp_name) & (self.dfp['State'] != 'Ended')]['Name']) # not including ended projects
@@ -1931,6 +1931,9 @@ class Db(object):
                     scolap += '</div>\n'
                     start = i
                     mp_name = rowslist[i]['Name'].values[0] # for the next megaproject
+                    # if this is the one in defs.html_mark - insert a marker
+                    if rowslist[i]['ID'].values[0] == defs.html_mark:
+                        scolap += '<button type="button" class="collapsible">THIS IS A MARKER - LAST TIME PROCESSED TILL HERE</button><br>'#\n<div class="content">'   
             # after the for loop, still need to add the last megaproject
             last = len(rowslist)
             g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
