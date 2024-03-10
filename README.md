@@ -67,8 +67,10 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - align state names across all databases. so when an item is active, it is state 'Open' for all (now some has On and Off) and also align on the name of 'OnHold'
  - remove the on hold items and the dormant items from the online report. can add online full command, to see all of the online items
  - FIX: Client say: list 00000006:list Server Said: Transaction: start activity COMPLETED. New ID is: 808 () [seems has repeated what happened before it! did not really create a new one]
- - add a 'mark' command that will insert something to teh html file after some megaproject or after any item (id). this will help go over the file part by part. make also ability to remove the mark or report where the mark is
+ - add a 'mark' command that will insert something to teh html file after some megaproject or after any item (id). this will help go over the file part by part. make also ability to remove the mark or report where the mark is (some exist - mark as parameter) add ability to set mark by 'name' not just by 'id'
  - add 'list tree @id' whcih will list all the items under this id. list tree @id listall - lists also non active (closed, dormant, onhold) items
+ - add capability to print the 'now' activities or send them as email to me
+ - error tag @852 tEMAIL 00000040:tag @852 tEMAIL Server Said: Transaction: tag something FAILED with ERROR: tag provided does not meet the formatting ctiteria tTAG
  - search to TODO and fix
  - document all commands
  - END

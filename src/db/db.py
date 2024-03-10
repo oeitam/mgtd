@@ -1932,7 +1932,7 @@ class Db(object):
                     start = i
                     mp_name = rowslist[i]['Name'].values[0] # for the next megaproject
                     # if this is the one in defs.html_mark - insert a marker
-                    if rowslist[i]['ID'].values[0] == defs.html_mark:
+                    if rowslist[i]['ID'].values[0] == defs.html_mark or rowslist[i]['Name'].values[0] == defs.html_mark:
                         scolap += '<button type="button" class="collapsible">THIS IS A MARKER - LAST TIME PROCESSED TILL HERE</button><br>'#\n<div class="content">'   
             # after the for loop, still need to add the last megaproject
             last = len(rowslist)

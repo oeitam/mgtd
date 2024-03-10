@@ -307,7 +307,7 @@ params_dict = { 'use_tables'          : use_tables,
                 }
 
 params_list = [ 'use_tables', 'max_width', 'list_resp_row_limit','dev_or_prod',
-                'columns_print_style', 'html_mark' ]
+                'columns_print_style', 'html_mark']
 
 
 data_loc = data_loc + '\\' + dev_or_prod
@@ -420,6 +420,8 @@ help_message = '''
 82   task @P1 fromcb
 83   start @P1 fromcb
 84   set columns_print_style 1
+84.1 set html_mark 159
+84.2 set html_mark INTEL
 85   cont @14512 | cont text
 86   halt @14513 | halt text
 87   stop @14514 | stop text
