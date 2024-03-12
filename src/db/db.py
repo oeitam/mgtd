@@ -583,9 +583,10 @@ class Db(object):
             return self.had_error('Project name supplied must be all lower case and no spaces (format project_name)\n')
         # check if project exists
         if self.dfp is not None:
-            if (self.project_name) in self.dfp[self.dfp['MEGAPROJECT'] == self.megaproject_name]['Name'].values: # search if the project name exists in the same megaproject
-                logger.debug("Request to create an already existing project in the Megaproject {} {}".format(self.project_name, self.dfp['Name'].values))
-                self.error_details = "Request to create an already existing project in the Megaproject {} {}".format(self.project_name, self.dfp['Name'].values)
+            # if (self.project_name) in self.dfp[self.dfp['MEGAPROJECT'] == self.megaproject_name]['Name'].values: # search if the project name exists in the same megaproject
+            if (self.project_name) in list(self.dfp['Name']) : # search for project duplicate name
+                logger.debug("Request to create an already existing project name {} (in the Megaproject) {}".format(self.project_name, self.dfp['Name'].values))
+                self.error_details = "Request to create an already existing project name {} (in the Megaproject) {}".format(self.project_name, self.dfp['Name'].values)
                 return False
         # check if the mega project exsists
         if self.dfm is not None:
@@ -1916,7 +1917,8 @@ class Db(object):
                     last = i
                     # g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
                     g = list(self.dfp[(self.dfp['MEGAPROJECT'] == mp_name) & (self.dfp['State'] != 'Ended')]['Name']) # not including ended projects
-                    scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
+                    g1 = self.dfm[self.dfm['Name'] == mp_name]['Description'].values[0]
+                    scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}] =>=>=> {g} ({g1})</button>\n<div class="content">'
                     if start == last: #megaproject with no projects in it
                         dd = pd.DataFrame(rowslist[start])
                     else:
@@ -1936,8 +1938,10 @@ class Db(object):
                         scolap += '<button type="button" class="collapsible">THIS IS A MARKER - LAST TIME PROCESSED TILL HERE</button><br>'#\n<div class="content">'   
             # after the for loop, still need to add the last megaproject
             last = len(rowslist)
-            g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
-            scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}]   =>=>=>   {g}</button>\n<div class="content">'
+            g  = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
+            g  = list(self.dfp[(self.dfp['MEGAPROJECT'] == mp_name) & (self.dfp['State'] != 'Ended')]['Name'])
+            g1 = self.dfm[self.dfm['Name'] == mp_name]['Description'].values[0]
+            scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}] =>=>=> {g} ({g1})</button>\n<div class="content">'
             dd = pd.concat(rowslist[start:last])
             dd.reset_index(inplace=True) # reindexes 0 to len(dd)
             dd.drop('index', axis=1,inplace=True) # removes the old index (now a column named 'index')

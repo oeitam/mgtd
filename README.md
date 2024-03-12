@@ -71,6 +71,10 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - add 'list tree @id' whcih will list all the items under this id. list tree @id listall - lists also non active (closed, dormant, onhold) items
  - add capability to print the 'now' activities or send them as email to me
  - error tag @852 tEMAIL 00000040:tag @852 tEMAIL Server Said: Transaction: tag something FAILED with ERROR: tag provided does not meet the formatting ctiteria tTAG
+ - for Activity (and Task?) consider adding a state of 'new' before 'started' so 'started' can be something that really started to work with (vs 'new' is just entered to teh database, no action. somewhat like new and acknoledged in hsdes)
+ - why failing? "edit @578 Description | for CPSV level debug related"
+ - 'add' command like 'edit' (or make it edit @id add | bla bla bla) that adds on teh description, not replacing it.
+ - ~~Done issue: if project name is not unique across teh dtabase, and it is still used as identifier for task or activity relations, we may have a duality in task or activity relation. So - must make project name unique across the database or need to use IDs only for relations~~
  - search to TODO and fix
  - document all commands
  - END
