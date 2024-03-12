@@ -707,14 +707,14 @@ class Db(object):
              self.project_name, # PROJECT
              tag, # Tag
              priority, # Priority
-             '', # Due_Date
-             '', # Expiration_Date
+             #'', # Due_Date
+             #'', # Expiration_Date
              '', # Wakeup_Date
-             '', # Location
-             '', # Context
-             [], # ACTIVITYs
-             [], # Sub_TASKs
-             '', # Parent_TASK
+             #'', # Location
+             #'', # Context
+             #[], # ACTIVITYs
+             #[], # Sub_TASKs
+             #'', # Parent_TASK
              today_adjusted_str, # Start_Time
              [], # State_Time
              [], # State_Text
@@ -783,7 +783,7 @@ class Db(object):
              self.trans_description, # Description
              tag, # Tag
              priority, # Priority
-             '', # End_Date
+             #'', # End_Date
              '' # Wakeup_Date
              # TASK , PROJECT
              ] + couple + \
