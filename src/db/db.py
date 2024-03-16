@@ -122,6 +122,8 @@ class Db(object):
                          'dfa': self.dfa,
                          }
         self.id2db = {}
+        self.name2db = {} #for mega and projects only
+        self.name2id = {} #for mega and projects only
         self.load_dbs()
         self.get_new_ID(1) # the 1 means this is the a setup - that is - check the file is here etc
         # create the operations_bucket
@@ -147,9 +149,9 @@ class Db(object):
                                   'online'             : self.online_check,
                                   'create list'        : self.create_list,
                                   'move list'          : self.move_items,
-                                  'move task'          : self.move_items,
-                                  'move activity'      : self.move_items,
-                                  'move item'          : self.move_items,
+                                  'move things'        : self.move_items,
+                                  #'move activity'      : self.move_items,
+                                  #'move item'          : self.move_items,
                                   'set param'          : self.set_param,
                                   'list parameter'     : self.list_parameter,
                                   'list shortcut'      : self.list_shortcut,
@@ -269,6 +271,8 @@ class Db(object):
             self.dfm.set_index('ID', inplace=True)
             self.db_table['dfm'] = self.dfm
             self.id2db.update({x : 'dfm' for x in list(self.dfm.index)})
+            self.name2db.update({x : 'dfm' for x in list(self.dfm['Name'])})
+            self.name2id.update({x : self.dfm[self.dfm['Name'] == x].index[0] for x in list(self.dfm['Name'])})
         else:
             self.dfm = None
         # proj
@@ -282,6 +286,8 @@ class Db(object):
             self.dfp.set_index('ID', inplace=True)
             self.db_table['dfp'] = self.dfp
             self.id2db.update({x : 'dfp' for x in list(self.dfp.index)})            
+            self.name2db.update({x : 'dfp' for x in list(self.dfp['Name'])})
+            self.name2id.update({x : self.dfp[self.dfp['Name'] == x].index[0] for x in list(self.dfp['Name'])})
         else:
             self.dfp = None
         # task
@@ -357,8 +363,12 @@ class Db(object):
             self.state_to_list          = 'clean'
             self.wakeup_time            = 'clean'
             self.help_search            = 'clean'
-            self.move_from              = 'clean'
-            self.move_to                = 'clean'
+            self.move_from_name         = 'clean'
+            self.move_from_id           = 'clean'
+            self.move_to_name           = 'clean'
+            self.move_to_id             = 'clean'
+            self.in_move_to             = 'clean'
+            self.all_in_move            = 'clean'
             self.param_to_set           = 'clean'
             self.value_to_set           = 'clean'
             self.shortcut_to_delete     = 'clean'
@@ -631,7 +641,9 @@ class Db(object):
             t1 = self.dfm['Name'][self.dfm['Name'] == self.megaproject_name].index
             self.dfm['PROJECTs_List'][t1[0]].append(self.project_name)
         if res:
-            self.id2db[pID]='dfp' #update id2db
+            self.id2db[pID]='dfp' #update id2db and more
+            self.name2db[self.project_name]='dfp'
+            self.name2id[self.project_name]=pID
             return True
         else:
             self.error_details = "Failed to add a new project {} to the database([])".format(self.project_name, self.pID)
@@ -671,7 +683,10 @@ class Db(object):
         ldf.index.name = 'ID'
         logger.debug(ldf.to_string())
         self.add_to_db(which_db='dfm',df_to_add=ldf)
-        self.id2db[pID]='dfm' #update id2db
+        self.id2db[pID]='dfm' #update id2db and more
+        self.name2db[self.megaproject_name]='dfm'
+        self.name2id[self.megaproject_name]=pID
+
         return True
 
     # create a task
@@ -1416,38 +1431,117 @@ class Db(object):
         return True
 
     def move_items(self):
-        if self.transaction_type == 'move list':
-            if len(self.items_list) > 0:
-                for item in self.items_list:
-                    if item in self.dfa.index:
-                        self.dfa.loc[item, 'PROJECT'] = self.move_to
-                    elif item in self.dft.index:
-                        self.dft.loc[item, 'PROJECT'] = self.move_to
-        elif self.transaction_type == 'move item':
-            item = self.use_this_ID_for_ref
-            if item in self.dfa.index:
-                self.dfa.loc[item, 'PROJECT'] = self.move_to
-            elif item in self.dft.index:
-                self.dft.loc[item, 'PROJECT'] = self.move_to
-        elif self.transaction_type == 'move task':
-            if self.state_to_list == 'clean':
-                self.dft.loc[self.dft['PROJECT'] == self.move_from,'PROJECT']\
-                    = self.move_to
-            else: # there is a specific state to move
-                self.dft.loc[(self.dft['PROJECT'] == self.move_from) \
-                             & (self.dft['State'] == self.state_to_list) \
-                    , 'PROJECT'] = self.move_to
-        elif self.transaction_type == 'move activity':
-            # move_to_id = 1 
-            self.dfa.loc[self.dfa['PROJECT'] == self.move_from,'PROJECT'] = self.move_to
-            if self.state_to_list == 'clean':
-                self.dfa.loc[self.dft['PROJECT'] == self.move_from, 'PROJECT'] \
-                    = self.move_to
-            else:  # there is a specific state to move
-                self.dfa.loc[(self.dfa['PROJECT'] == self.move_from) \
-                             & (self.dfa['State'] == self.state_to_list) \
-                    , 'PROJECT'] = self.move_to
+        if self.transaction_type == "move list" : # we do not support it for now
+            self.had_error('move list command is not supported for now\n')
+            return False
+
+        # identify what are we moving
+        if self.move_from_id != 'clean' : # the moving item is given by id
+            if self.move_from_id in self.id2db.keys() :
+                source_db = self.id2db[self.move_from_id]
+                if source_db in ['dfm', 'dfp'] : # for project or megaproject populate teh name also (useful later)
+                    self.move_from_name = self.db_table[source_db].loc[self.move_from_id,'Name']
+            else:
+                self.had_error(f'Item to move provided ({self.move_from_id}) was not found\n')
+                return False
+        else: #given by name
+            if self.move_from_name in self.name2db.keys() :
+                source_db = self.name2db[self.move_from_name]
+                self.move_from_id = self.name2id[self.move_from_name] # enable working also with ids (not names)
+            else:
+                self.had_error(f'Item to move provided ({self.move_from_name}) was not found as a project or megaproject name\n')
+                return False
+        
+        # in case of a list, make sure all items are in the correct type ?? needed?
+        
+        # identify where are we moving to
+        if self.move_to_id != 'clean' : # the moving item is given by id
+            if self.move_to_id in self.id2db.keys() :
+                dest_db = self.id2db[self.move_to_id]
+                if dest_db in ['dfm', 'dfp'] : # for project or megaproject populate teh name also (useful later)
+                    self.move_to_name = self.db_table[dest_db].loc[self.move_to_id,'Name']
+            else:
+                self.had_error(f'Move destination provided ({self.move_to_id}) was not found\n')
+                return False
+        else: #given by name
+            if self.move_to_name in self.name2db.keys() :
+                dest_db = self.name2db[self.move_to_name]
+                self.move_to_id = self.name2id[self.move_to_name] # enable working also with ids (not names)
+            else:
+                self.had_error(f'Move destination provided ({self.move_to_name}) was not found as a project or megaproject name\n')
+                return False
+
+        # based on source db, send to the function that moves
+        if source_db == 'dfp': # move a project
+            res = self._move_project(source_db, dest_db)
+            if not res : return False
+
+        if source_db == 'dft': # move a task
+            res = self._move_task(source_db, dest_db)
+            if not res : return False
+
+        if source_db == 'dfa': # move an activity
+            res = self._move_activity(source_db, dest_db)
+            if not res : return False
+
         return True
+
+    def _move_project(self, source_db, dest_db):
+        # check correctness
+        if dest_db != 'dfm': # cannot move a project unless to a megaproject
+            self.had_error(f'Request to move a project not to a megaproject is illegal\n')
+            return False
+        sdf = self.db_table[source_db]
+        ddf = self.db_table[dest_db]
+        megaproject_migrating_from_id = self.name2id[sdf.loc[self.move_from_id,'MEGAPROJECT']]
+        # change the project parent
+        sdf.loc[self.move_from_id,'MEGAPROJECT'] = self.move_to_name
+        # add to new MEGAPROJECT project list and remove from the MEGAPROJECT project list of the one removed from
+        ddf.loc[self.move_to_id,'PROJECTs_List'].append(self.move_from_name) # add the new project to the list
+        ddf.loc[megaproject_migrating_from_id,'PROJECTs_List'].remove(self.move_from_name)
+        return True
+    
+    def _move_task(self, source_db, dest_db):
+        # check correctness
+        if dest_db != 'dfp': # cannot move a task unless to a project
+            self.had_error(f'Request to move a task not to a project is illegal\n')
+            return False
+        sdf = self.db_table[source_db]
+        #ddf = self.db_table[dest_db]
+        # all needed is change the project field for the target task
+        sdf.loc[self.move_from_id,'PROJECT'] = self.move_to_name     
+        return True
+
+    def _move_activity(self, source_db, dest_db):
+        if dest_db not in ['dfp', 'dft']: # activity can move only to a project or a task
+            self.had_error(f'Request to move an activity not to a task or a project is illegal\n')
+            return False
+        sdf = self.db_table[source_db]
+        # find if the activity parent is task or project
+        if sdf.loc[self.move_from_id,'TASK'] == None and sdf.loc[self.move_from_id,'PROJECT'] != None:
+            activity_parent = 'PROJECT'
+            #activity_non_parent = 'TASK'
+        elif sdf.loc[self.move_from_id,'TASK'] != None and sdf.loc[self.move_from_id,'PROJECT'] == None:
+            activity_parent = 'TASK'
+            #activity_non_parent = 'PROJECT'
+        else:
+            self.had_error(f'move activity failed due to inconsistant TASK/PROJECT parent ({self.move_from_id})\n')
+            return False
+        if dest_db == 'dft':
+            activity_new_parent = 'TASK'
+            #activity_new_non_parent = 'PROJECT'
+        if dest_db == 'dfp':
+            activity_new_parent = 'PROJECT'
+            #activity_new_non_parent = 'TASK'
+        # move activity
+        if activity_parent == activity_new_parent:
+            sdf.loc[self.move_from_id, activity_parent] = self.move_to_id
+        else:
+            sdf.loc[self.move_from_id, activity_new_parent] = self.move_to_id
+
+            sdf.loc[self.move_from_id, activity_parent] = None
+        return True
+
 
     def myprint(self, df,which_db,title):
         str1 = df.to_json()

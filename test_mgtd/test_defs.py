@@ -3,6 +3,40 @@
 #print('test_defs.py !!')
 
 test_commands = [
+    # for each
+    # by id,id
+    # by id,name
+    # by name, id
+    # by name, name
+    # move project
+    'move @104 to @102',
+    'move @104 to @MP1',
+    'move @p1mp1 to @102',
+    'move @p1mp1 to @MP1',
+     
+    # move task
+    'move @123 to @105',
+    'move @123 to @p3mp2',
+
+    # move activity from task to project
+    'move @140 to @107',
+    'move @140 to @121',
+    'move @140 to @p1mp2',
+    'move @140 to @121',
+    # move activity from task to task
+    'move @140 to @129',
+    'move @140 to @121',
+    # move activity from project to project
+    'move @136 to @106',
+    'move @136 to @107',
+    'move @136 to @p2mp3',
+    'move @136 to @p1mp2',
+    # move activity from project to task
+    'move @136 to @127',
+    'move @136 to @107',
+   
+    
+    'die',
     'import',
     #'start @130 fromcb',
     #'create megaproject AAAA',
@@ -46,50 +80,50 @@ build_db = [
     'create megaproject MP2 | megaproject MP2' ,
     'create megaproject MP3 | megaproject MP3' ,
     # projects
-    'create project P1MP1 @MP1 | project P1 at megaproject MP1' ,
-    'create project P2MP1 @MP1 | project P2 at megaproject MP1' ,
-    'create project P3MP1 @MP1 | project P3 at megaproject MP1' ,
-    'create project P1MP2 @MP2 | project P1 at megaproject MP2' ,
-    'create project P2MP2 @MP2 | project P2 at megaproject MP2' ,
-    'create project P3MP2 @MP2 | project P3 at megaproject MP2' ,
-    'create project P1MP3 @MP3 | project P1 at megaproject MP3' ,
-    'create project P2MP3 @MP3 | project P2 at megaproject MP3' ,
-    'create project P3MP3 @MP3 | project P3 at megaproject MP3' ,
+    'create project p1mp1 @MP1 | project P1 at megaproject MP1' ,
+    'create project p2mp1 @MP1 | project P2 at megaproject MP1' ,
+    'create project p3mp1 @MP1 | project P3 at megaproject MP1' ,
+    'create project p1mp2 @MP2 | project P1 at megaproject MP2' ,
+    'create project p2mp2 @MP2 | project P2 at megaproject MP2' ,
+    'create project p3mp2 @MP2 | project P3 at megaproject MP2' ,
+    'create project p1mp3 @MP3 | project P1 at megaproject MP3' ,
+    'create project p2mp3 @MP3 | project P2 at megaproject MP3' ,
+    'create project p3mp3 @MP3 | project P3 at megaproject MP3' ,
     # tasks
-    'task @P1MP1 | task T1P1MP1' ,
-    'task @P1MP1 | task T2P1MP1' ,
-    'task @P2MP1 | task T1P2MP1' ,
-    'task @P2MP1 | task T2P2MP1' ,
-    'task @P3MP1 | task T1P3MP1' ,
-    'task @P3MP1 | task T2P3MP1' ,
-    'task @P1MP2 | task T1P1MP2' ,
-    'task @P1MP2 | task T2P1MP2' ,
-    'task @P2MP2 | task T1P2MP2' ,
-    'task @P2MP2 | task T2P2MP2' ,
-    'task @P3MP2 | task T1P3MP2' ,
-    'task @P3MP2 | task T2P3MP2' ,
-    'task @P1MP3 | task T1P1MP3' ,
-    'task @P1MP3 | task T2P1MP3' ,
-    'task @P2MP3 | task T1P2MP3' ,
-    'task @P2MP3 | task T2P2MP3' ,
-    'task @P3MP3 | task T1P3MP3' ,
-    'task @P3MP3 | task T2P3MP3' ,
+    'task @p1mp1 | task T1P1MP1' ,
+    'task @p1mp1 | task T2P1MP1' ,
+    'task @p2mp1 | task T1P2MP1' ,
+    'task @p2mp1 | task T2P2MP1' ,
+    'task @p3mp1 | task T1P3MP1' ,
+    'task @p3mp1 | task T2P3MP1' ,
+    'task @p1mp2 | task T1P1MP2' ,
+    'task @p1mp2 | task T2P1MP2' ,
+    'task @p2mp2 | task T1P2MP2' ,
+    'task @p2mp2 | task T2P2MP2' ,
+    'task @p3mp2 | task T1P3MP2' ,
+    'task @p3mp2 | task T2P3MP2' ,
+    'task @p1mp3 | task T1P1MP3' ,
+    'task @p1mp3 | task T2P1MP3' ,
+    'task @p2mp3 | task T1P2MP3' ,
+    'task @p2mp3 | task T2P2MP3' ,
+    'task @p3mp3 | task T1P3MP3' ,
+    'task @p3mp3 | task T2P3MP3' ,
     # subtasks ???
     # activities
-    'start @P1MP1 | activity A1 at P1MP1' , 
-    'start @P2MP1 | activity A2 at P2MP1' , 
-    'start @P3MP1 | activity A3 at P3MP1' , 
-    'start @P1MP2 | activity A4 at P1MP2' , 
-    'start @P1MP2 | activity A5 at P1MP2' , 
-    'start @P1MP2 | activity A6 at P1MP2' , 
-    'start @113   | activity A10 at task 113' , 
-    'start @113   | activity A11 at task 113' , 
-    'start @113   | activity A12 at task 113' , 
-    'start @113   | activity A13 at task 113' , 
-    'start @130   | activity A10 at task 130' , 
-    'start @130   | activity A11 at task 130' , 
-    'start @130   | activity A12 at task 130' , 
-    'start @130   | activity A13 at task 130' , 
+    'start @p1mp1 | activity A1 at P1MP1' , 
+    'start @p2mp1 | activity A2 at P2MP1' , 
+    'start @p3mp1 | activity A3 at P3MP1' , 
+    'start @p1mp2 | activity A4 at P1MP2' , 
+    'start @p1mp2 | activity A5 at P1MP2' , 
+    'start @p1mp2 | activity A6 at P1MP2' , 
+    'start @00000000   | activity A10 at task 113' , 
+    'start @00000000   | activity A11 at task 113' , 
+    'start @00000000   | activity A12 at task 113' , 
+    'start @00000000   | activity A13 at task 113' , 
+    'start @00000000   | activity A10 at task 130' , 
+    'start @00000000   | activity A11 at task 130' , 
+    'start @00000000   | activity A12 at task 130' , 
+    'start @00000000   | activity A13 at task 130' , 
     # die
     'die' ,
 ]

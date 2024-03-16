@@ -382,11 +382,14 @@ help_message = '''
 50   sleep @10673 plus 88
 51   sleep @10673
 52   list wakeup
-53   move task from test1 to test2
-54   move activity from test1 to test2 state OnHold
+53.1 move @104 to @102
+53.2 move @104 to @MP1
+53.3 move @p1mp1 to @102
+53.4 move @p1mp1 to @MP1
+54   [not implemented] move list
 55   create list @10677 @10678 @10679
-56   move list to test2
-57   move @10661 to test2
+56
+57
 58   set max_width value 13 [[context of current session only (?)]]
 59   list parameter
 60   list shortcut

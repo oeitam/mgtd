@@ -385,9 +385,9 @@ prefix("online", 20)
 prefix("plus", 20)
 prefix("week", 20)
 prefix("sleep",20)
-prefix("move", 120)
-prefix("from", 120)
-prefix("to", 120)
+prefix("move", 20)
+prefix("from", 20)
+prefix("to", 20)
 prefix("set", 20)
 prefix("value", 20)
 prefix("tag", 20)
@@ -403,6 +403,7 @@ prefix("hier", 20)
 prefix("edit", 20)
 prefix("import", 20)
 prefix("prio", 20)
+prefix("all", 20)
 
 
 
@@ -499,9 +500,9 @@ def nud(self):
         if gdb.items_list[0] == 'clean':
             gdb.items_list.pop(0) # this removed the 'clean' item
         advance() # jump over to the next token
-    elif gdb.transaction_type == "move item":
-        gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action
-        advance()
+    # elif gdb.transaction_type == "move item":
+    #     gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action
+    #     advance()
     elif gdb.transaction_type == "tag something":
         gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action
         advance()
@@ -533,6 +534,19 @@ def nud(self):
         gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action
         advance()
         gdb.edit_column_name = str(token.value)
+    elif gdb.transaction_type == 'move things' :
+        if gdb.in_move_to != 'yes': # we are in the 'what to move section'
+            if token.value.isdigit() : #if the 'what to move' is an id
+                gdb.move_from_id = int(token.value)
+            else:
+                gdb.move_from_name = token.value
+        else:
+            if token.value.isdigit() : #if the 'what to move' is an id
+                gdb.move_to_id = int(token.value)
+            else:
+                gdb.move_to_name = token.value
+        advance()  # to check what is beyond ..
+
 
     self.first = expression()
     return self
@@ -894,32 +908,37 @@ def nud(self):
     logger.debug('move nud')
     if token.id == 'list':
         gdb.transaction_is('move list')
-        advance()  # get over list/task/activity word
-    elif token.id == 'task':
-        gdb.transaction_is('move task')
-        advance()  # get over list/task/activity word
-    elif token.id == 'activity':
-        gdb.transaction_is('move activity')
-        advance()  # get over list/task/activity word
+        #advance()  # get over lis/task/activity word
     else:
-        gdb.transaction_is('move item')
-
+        gdb.transaction_is('move things')
+        if token.id == 'all':
+            gdb.all_in_move = 'yes'
+            advance()  # get 'all' word
+    
+    # elif token.id == 'task':
+    #     gdb.transaction_is('move task')
+    #     advance()  # get over list/task/activity word
+    # elif token.id == 'activity':
+    #     gdb.transaction_is('move activity')
+    #     advance()  # get over list/task/activity word
+    # else:
+    #     gdb.transaction_is('move item')
     self.first = expression()
     return self
 
-@method(symbol("from"))
-def nud(self):
-    logger.debug('from nud')
-    gdb.move_from = token.value
-    advance()
-    self.first = expression()
-    return self
+# @method(symbol("from")) # do not expect to be here ever
+# def nud(self):
+#     logger.debug('from nud')
+#     gdb.move_from = token.value
+#     advance()
+#     self.first = expression()
+#     return self
 
 @method(symbol("to"))
 def nud(self):
     logger.debug('to nud')
-    gdb.move_to = token.value
-    advance()
+    gdb.in_move_to = 'yes'
+    #advance() # skip over the 'to'
     self.first = expression()
     return self
 

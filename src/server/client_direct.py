@@ -25,8 +25,11 @@ class client(object):
         tl = test_defs.test_commands
         for comm in list(reversed(defs.auto_first_commands_list)): #since in prod is run last command first, here also
             tl.insert(0,comm)
-        for m in tl:
-        #for m in test_defs.build_db:
+        #######################################################################
+        # comment in and out following two lines to build db or run test_commands
+        #########################################################################    
+        for m in tl: # to run test commands
+        #for m in test_defs.build_db: # to build DB for testing
             print(str(cnt).zfill(4) + ":" + m)
             cnt += 1
             if (defs.die_word in m[0:5]):

@@ -15,4 +15,6 @@ __pycache__/
 *output/
 local_*
 *.html
+*.pdf
+
 
