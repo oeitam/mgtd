@@ -30,30 +30,32 @@ add:
  - ~~Done add check that the priority setting is indeed correctly spelled and if not - return an error~~
  - ~~Done add ability to set prioroity at creation  (like start @123 tag tXXX prio Yyyy)~~
  - ~~Done enable priority in mid command (start @xxx prio High tag tSOMETAG) ~~
+ - ~~ Donecheck how the move command works (before changes) and document or make useful~~
+ - ~~Done and also - support move command for projects from one megaproject to another~~
+ - ~~Done add a 'mark' command that will insert something to teh html file after some megaproject or after any item (id). this will help go over the file part by part. make also ability to remove the mark or report where the mark is (some exist - mark as parameter) add ability to set mark by 'name' not just by 'id' ~~
  - \\/support bulk upload of commands from a txt file
  - \\/enable bulk priority [of a list of ids] some priorioty (bulk priority change)
- - document how to run in dev mode and production mode, direct and server modes
  - \\/add default sort and filter in the printing of DF - in regular list and in list html
  - \\/when listing activity - for the project and task include first 2/3 words, not just the number
  - \\/when doing list tag - add a column for the type of the item (activity, task, etc)
- - add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'
- - find a way to load multy line things (as the terminal window supports only single line). perhaps the solution is the 'fromcb' option - from clipboard
- - ~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
- - the commend "sleep @136 1" put 1 as wakeup time. Need to check for correct syntax on wakeup time
  - \\/add to task printing also the megaproject it belongs to. One implementation is to do that just for printing. Another implementaiton is to add a column, but then need to take care of this also when doing a move to a task
- - check how the move command works (before changes) and document or make useful
  - \\/add list task and activity under project xxx or list project and task and activity under megaproject xxx
- - add ability to list for prioroity (like there is ability to list for state)\ 
-so when listing we can see things more clearly, limit the number of comment lines to a parameter (3? 4?) with ability also to see all comments (list ... allcomments ....)
  - \\/add ability to remove tag from all the database (like untagg tTODAY all)
- - the command "task states" created a task for some reason ... not good. fix
- - when tagging - notify the user if the tag is new or existing
  - \\/add a recurring Activity ability (like - an activity that is created in a specific project once a month automatically)
  - \\/we have state transitions date and text. print them together (ither in list @ID or specially)
+ - \\/~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
+ - \\/ (exists in html basically) add 'list tree @id' whcih will list all the items under this id. list tree @id listall - lists also non active (closed, dormant, onhold) items
+ - document how to run in dev mode and production mode, direct and server modes
+ - add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'
+ - find a way to load multy line things (as the terminal window supports only single line). perhaps the solution is the 'fromcb' option - from clipboard
+ - the commend "sleep @136 1" put 1 as wakeup time. Need to check for correct syntax on wakeup time
+ - add ability to list for prioroity (like there is ability to list for state)\ 
+so when listing we can see things more clearly, limit the number of comment lines to a parameter (3? 4?) with ability also to see all comments (list ... allcomments ....)
+ - the command "task states" created a task for some reason ... not good. fix
+ - when tagging - notify the user if the tag is new or existing
  - check - list wakeup supposed to return what has wakeup in teh past and this week. On Sunday it did not give anything ... on Monday - it showed what needs wakeup this week. So there is a shift of a day in 'what is this week'. Check.
   - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
  - when doing edit to the name of a megaproject, need to go and replace this name for projects in their records
- - and also - support move command for projects from one megaproject to another
  - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
 project that is dormant all tasks and activities cannot be open or onhold, etc. ~~also check no duplicate IDs ~~
  - - check that all items that neeed a parent have a parent
@@ -67,8 +69,6 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - align state names across all databases. so when an item is active, it is state 'Open' for all (now some has On and Off) and also align on the name of 'OnHold'
  - remove the on hold items and the dormant items from the online report. can add online full command, to see all of the online items
  - FIX: Client say: list 00000006:list Server Said: Transaction: start activity COMPLETED. New ID is: 808 () [seems has repeated what happened before it! did not really create a new one]
- - add a 'mark' command that will insert something to teh html file after some megaproject or after any item (id). this will help go over the file part by part. make also ability to remove the mark or report where the mark is (some exist - mark as parameter) add ability to set mark by 'name' not just by 'id'
- - add 'list tree @id' whcih will list all the items under this id. list tree @id listall - lists also non active (closed, dormant, onhold) items
  - add capability to print the 'now' activities or send them as email to me
  - error tag @852 tEMAIL 00000040:tag @852 tEMAIL Server Said: Transaction: tag something FAILED with ERROR: tag provided does not meet the formatting ctiteria tTAG
  - for Activity (and Task?) consider adding a state of 'new' before 'started' so 'started' can be something that really started to work with (vs 'new' is just entered to teh database, no action. somewhat like new and acknoledged in hsdes)

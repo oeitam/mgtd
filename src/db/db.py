@@ -508,11 +508,11 @@ class Db(object):
         res = self.operation_bucket.get(self.transaction_type, self.had_error)()
         if res:
             res2 = self.save_databases()
-            try: #since fails a lot, let us not hang on this
-                self.list_html() #after each command operation - update the html files
-            except:
-                print("Excepted in list_html")
-                pass
+            # try: #since fails a lot, let us not hang on this
+            #     self.list_html() #after each command operation - update the html files
+            # except:
+            #     print("Excepted in list_html")
+            #     pass
             self.cid = self.pID
             self.lid = self.use_this_ID_for_ref
             if res2:
