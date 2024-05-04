@@ -704,7 +704,7 @@ class Db(object):
         if self.priority_to_set != 'clean':
             priority = self.priority_to_set
         else:
-            priority = ''
+            priority = 'Low'
         # if fromcb was used, then need to compy clipbard into transaction description
         if self.fromcb == 'Yes':
             try:
@@ -781,7 +781,7 @@ class Db(object):
         if self.priority_to_set != 'clean':
             priority = self.priority_to_set
         else:
-            priority = ''
+            priority = 'Low'
         # if fromcb was used, then need to compy clipbard into transaction description
         if self.fromcb == 'Yes':
             try:

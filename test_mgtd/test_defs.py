@@ -3,6 +3,13 @@
 #print('test_defs.py !!')
 
 test_commands = [
+    'list shortcut',
+    #'list activity',
+    'list activity col Start_Date drange 24ww11.Sun 24ww11.Wed',
+    'die',
+    
+    
+    
     # for each
     # by id,id
     # by id,name

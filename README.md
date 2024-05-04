@@ -33,6 +33,10 @@ add:
  - ~~ Donecheck how the move command works (before changes) and document or make useful~~
  - ~~Done and also - support move command for projects from one megaproject to another~~
  - ~~Done add a 'mark' command that will insert something to teh html file after some megaproject or after any item (id). this will help go over the file part by part. make also ability to remove the mark or report where the mark is (some exist - mark as parameter) add ability to set mark by 'name' not just by 'id' ~~
+ - ~~ Done document how to run in dev mode and production mode, direct and server modes~~
+ - ~~Done issue: if project name is not unique across teh dtabase, and it is still used as identifier for task or activity relations, we may have a duality in task or activity relation. So - must make project name unique across the database or need to use IDs only for relations~~
+ - ~~Done add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'~~
+ - ~~Done add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?~~
  - \\/support bulk upload of commands from a txt file
  - \\/enable bulk priority [of a list of ids] some priorioty (bulk priority change)
  - \\/add default sort and filter in the printing of DF - in regular list and in list html
@@ -45,8 +49,6 @@ add:
  - \\/we have state transitions date and text. print them together (ither in list @ID or specially)
  - \\/~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
  - \\/ (exists in html basically) add 'list tree @id' whcih will list all the items under this id. list tree @id listall - lists also non active (closed, dormant, onhold) items
- - document how to run in dev mode and production mode, direct and server modes
- - add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'
  - find a way to load multy line things (as the terminal window supports only single line). perhaps the solution is the 'fromcb' option - from clipboard
  - the commend "sleep @136 1" put 1 as wakeup time. Need to check for correct syntax on wakeup time
  - add ability to list for prioroity (like there is ability to list for state)\ 
@@ -54,7 +56,6 @@ so when listing we can see things more clearly, limit the number of comment line
  - the command "task states" created a task for some reason ... not good. fix
  - when tagging - notify the user if the tag is new or existing
  - check - list wakeup supposed to return what has wakeup in teh past and this week. On Sunday it did not give anything ... on Monday - it showed what needs wakeup this week. So there is a shift of a day in 'what is this week'. Check.
-  - add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?
  - when doing edit to the name of a megaproject, need to go and replace this name for projects in their records
  - add to 'online' also a check that all tasks and activities under a project is in the correct state (can do that per task and per activity)\
 project that is dormant all tasks and activities cannot be open or onhold, etc. ~~also check no duplicate IDs ~~
@@ -72,9 +73,12 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - add capability to print the 'now' activities or send them as email to me
  - error tag @852 tEMAIL 00000040:tag @852 tEMAIL Server Said: Transaction: tag something FAILED with ERROR: tag provided does not meet the formatting ctiteria tTAG
  - for Activity (and Task?) consider adding a state of 'new' before 'started' so 'started' can be something that really started to work with (vs 'new' is just entered to teh database, no action. somewhat like new and acknoledged in hsdes)
+ - check/make move command updte lid and cid properly
+ - check why lid and cid do not work with move command ?????
+ - add a shortcut type like only replacing mv to move (rest of teh command remains the same)
+ - when closing a task or a project, check that all the items under it are closed and if not - make a note and do not close.
  - why failing? "edit @578 Description | for CPSV level debug related"
  - 'add' command like 'edit' (or make it edit @id add | bla bla bla) that adds on teh description, not replacing it.
- - ~~Done issue: if project name is not unique across teh dtabase, and it is still used as identifier for task or activity relations, we may have a duality in task or activity relation. So - must make project name unique across the database or need to use IDs only for relations~~
  - search to TODO and fix
  - document all commands
  - END
@@ -89,11 +93,9 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
 # weekly
 
 ## opens/unknowns
-does subtask (task @<taskid>) work?\
-not implemented [swap, today, clean]
 
 ## system settings
-need to have the following system variables\
+**need to have the following system variables**\
 "mgdt_code_path" = "C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd"
 "mgdt_local_path" = "C:\mgtd.local"
 
@@ -103,6 +105,25 @@ the list of commands is in the defs.py file
 2. the files locations are parametrized in defs.py
 3. when exiting (die), the program zips the local directory (parametrized, but usually c:\mgtd.local) and stores it in the code location (parametrized as well) in a directory named 'datastore'. The zipped files are created with a time tag as the name. They are not stored in github.
 4. 
+
+## run environment, dev and production envs
+1. the system supports 3 operational modes: developement, production and demo (demo is not really used as of MAr 24)
+2. each of the 3 environments has a completely seperate databases and a seperate configuration file
+3. all the run data (config files, utility scripts and the databses) are in c:\mgtd.local directotry (parametrized)
+### content of c:/mgtd.local [let us define ENVS as developement or demo or production]
+ - developement, production, demo folders with teh databases and html files in them
+ - mgtf.local.cfg file which is the config file in use when mgtd starts
+ - mgtd.local.ENVS.cfg are the (3) config files for each environment. see 'GoTo' scripts
+ - GoToENVS.py scripts - when mgtd is NOT running, run these python scripts to change the envoronment.
+ - - the script find what envirnoment was last used, saves the mgtd.local.cfg as mgtd.local.ENVS.cfg file as appropriate and copies the GoTo env config file to mgtd.local.cfg. next time mgtd is run is in teh new environment being set. 
+ - There are other files in teh directory which are obsolete or old or whatever
+### test/developement mode vs production mode operation
+ - the file to run is always mgtd.py as the starting script
+ - two "mode"s are supported for communication 'prod' for production and 'direct' for validation (used in developement environment)
+ - if mode is 'prod', the client used is the **client_script.py**' file which waits for user inputs and sends outputs to teh user process.\
+ the file mgtd_wt.ps1 calls the server and then the client_script.py
+ - if mode is 'direct' the server.init and server.server_process methods use the '**client_direct.py**' script to process commands in the test_defs.py file
+
 
 ## Operation
 this describes points how I use it (Jan 2024)\

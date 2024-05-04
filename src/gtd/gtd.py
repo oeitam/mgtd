@@ -149,6 +149,26 @@ class Gtd(object):
                         gdb.substitution_happened = 'Simple sub: from {} to {}\n'.\
                             format(defs.config[sect]['replace_what'], defs.config[sect]['replace_with'])
 
+        ###############################################
+        # complex1 substitutions
+        for sect in defs.config.sections():
+            if 'replace_' in sect:
+                if defs.config[sect]['replacement_type'] == 'complex1_substitution':
+                    orig_current_data = self.current_data
+                    pre  = orig_current_data.partition("|")[0].strip()
+                    post = orig_current_data.partition("|")[2].strip()
+                    cmd1 = pre.split(' ')
+                    cmd2 = defs.config[sect]['replace_with']
+                    if cmd1[0] == defs.config[sect]['replace_what']:
+                        for i in range(1,len(cmd1)):
+                            A1 = "X"+str(i)
+                            cmd2 = cmd2.replace(A1,cmd1[i])
+                        self.current_data = cmd2
+                        if post != '':
+                            self.current_data = self.current_data + " | " + post
+                        # if self.current_data == defs.config[sect]['replace_what']:
+                        #     self.current_data = defs.config[sect]['replace_with']
+                        gdb.substitution_happened = f'complex1 sub: from {orig_current_data} to {self.current_data}\n'
 
         ##############################################
         # check if context need to be kept, and if not - clean it up

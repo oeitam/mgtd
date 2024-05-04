@@ -10,7 +10,7 @@ from datetime import datetime, timedelta #, date, time, timedelta
 mgtd_code_path  = r"C:\Users\oeitam\OneDrive - Intel Corporation\Documents\Z-Work\Projects\mgtd"
 mgtd_local_path = r"C:\mgtd.local"
 
-auto_first_commands_list = ['online'] # add more commands to have more commands automatically run (note - first command to execute is end of the list)
+auto_first_commands_list = ['list html', 'online'] # add more commands to have more commands automatically run (note - first command to execute is end of the list)
 auto_first_commands = len(auto_first_commands_list) # for one first command. if we want more - increase this number
 
 
@@ -364,6 +364,7 @@ help_message = '''
 33   list activity col Start_Date drange 17ww17.Sun top
 34   list activity col Start_Date drange 17ww17 top
 35   list activity col Start_Date drange bot top
+35.1 list activity col Priority is High [is inc not ninc]
 36   list megaproject col ID irange 2569 2631
 37   list megaproject col ID irange 2569 top
 38   list megaproject col ID irange bot 2631
@@ -396,7 +397,8 @@ help_message = '''
 61   create shortcut | ["simple_substitution", "co", "start @10758 | checking out - go home"] [[updated in config file, kept for following sessions]]
 61.1 co [[same as calling "start @10758 | checking out - go home"]]
 61.2 create shortcut | ["pipe_substitution", "lulu", "start @12969"]
-61.3 lulu | activity details to start at 12696
+61.3 create shortcut | ["complex1_substitution", "t2", "start X1 tag X2 prio X3"] [[cmd: 't2 @778 tTAG High | bla blab' ==> start @778 tag tTAG prio High | bla blab]]
+61.4 lulu | activity details to start at 12696
 62   delete shortcut 5
 63   tag @10673 tag_two
 64   tag project UNIQUE tag_for_proj_one
