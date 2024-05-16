@@ -1326,7 +1326,8 @@ class Db(object):
                 ws = d-timedelta(days=d.weekday())
                 we = ws + timedelta(days=6)
                 we = we + defs.debug_delta
-                df2 = df1[df1['Wakeup_Date'].apply(date_conv_max_date).array <= we].copy()
+                df2 = df1[df1['Wakeup_Date'].apply(date_conv_max_date) <= we].copy()
+                # (error ? due to version change in pandas/python?) df2 = df1[df1['Wakeup_Date'].apply(date_conv_max_date).array <= we].copy()
                 if len(df2) == 0: # nothing found
                     self.list_resp += 'well ... nothing found here at {}.\n'.\
                         format(defs.db_names[df_name])

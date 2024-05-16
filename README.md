@@ -79,6 +79,10 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - when closing a task or a project, check that all the items under it are closed and if not - make a note and do not close.
  - why failing? "edit @578 Description | for CPSV level debug related"
  - 'add' command like 'edit' (or make it edit @id add | bla bla bla) that adds on teh description, not replacing it.
+ - check why 'list activity col State is Open' does not work (but list acticity state Dormant works)
+ - check why this fails: 'move @979 to @211'
+ - check why 'close @979 | done .. and followup activity created' does not work, while 'close @979 | done' works
+ - 
  - search to TODO and fix
  - document all commands
  - END
