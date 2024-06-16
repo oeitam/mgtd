@@ -59,6 +59,11 @@ class Server(object):
         output_filename = defs.mgtd_code_path + '\datastore\\' + today_str
         source_dir = defs.mgtd_local_path
         shutil.make_archive(output_filename, format='zip', root_dir=source_dir)
+        # adding - also copying one of the html (so can view on teh phone for example)
+        # TODO note - here we support only 'production' mode
+        if defs.mode == 'prod':
+            shutil.copy(defs.mgtd_local_path + '\production\\' + 'list_html_production_hier.html', defs.mgtd_code_path + '\datastore\\' + 'list_html_production_hier.html' )
+
 
     # server_process method is the main method of the server
     # crates a socket from the server for the client to use

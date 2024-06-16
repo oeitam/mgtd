@@ -458,13 +458,13 @@ class Db(object):
     def save_databases(self):
         try:
             if self.dfm is not None:
-                self.dfm.to_csv(defs.data_loc + '\dfm.csv')
+                self.dfm.to_csv(defs.data_loc + '\\dfm.csv')
             if self.dfp is not None:
-                self.dfp.to_csv(defs.data_loc + '\dfp.csv')
+                self.dfp.to_csv(defs.data_loc + '\\dfp.csv')
             if self.dft is not None:
-                self.dft.to_csv(defs.data_loc + '\dft.csv')
+                self.dft.to_csv(defs.data_loc + '\\dft.csv')
             if self.dfa is not None:
-                self.dfa.to_csv(defs.data_loc + '\dfa.csv')
+                self.dfa.to_csv(defs.data_loc + '\\dfa.csv')
         except:
             #print("Could not save one of the dfx files.\n"+\
             #      "Suggest to make sure no file is open in another app.\n"+\
@@ -1176,7 +1176,7 @@ class Db(object):
                 if self.list_resp_rows == -1 : # means this is the first time we handle the specific lsit
                     self.list_resp_rows = len(df)
                 if self.list_resp_rows == 0 : # meaning-  we finished showing all
-                    self.list_resp = "No more data to show"
+                    self.list_resp = "No (more) data to show"
                     return True
                 t1 = self.list_resp_rows
                 # handle the case of list all
@@ -2076,7 +2076,7 @@ class Db(object):
                         s2l[i] = s2l[i].replace('\n]','<br>]')
                         s2l[i] = s2l[i].replace('+++\\n','+++<br>')
                         s2l[i] = s2l[i].replace('\\n, +++','<br>+++')
-                        s2l[i] = s2l[i].replace('\&lt;br\&gt;','\<br> ')
+                        s2l[i] = s2l[i].replace(r'\&lt;br\&gt;','\<br> ')
                 s2 = "\n".join(s2l)
             file = open(defs.mgtd_local_path + r'/{}/list_html_{}.html'.format(defs.dev_or_prod, defs.dev_or_prod),"w")
             file.write(s2)

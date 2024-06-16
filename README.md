@@ -82,6 +82,15 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - check why 'list activity col State is Open' does not work (but list acticity state Dormant works)
  - check why this fails: 'move @979 to @211'
  - check why 'close @979 | done .. and followup activity created' does not work, while 'close @979 | done' works
+ - for something like 'start @xxx | task is ...' it tried to create a task ... check if/why
+ - add to the html page where for each MEGAPROJECT the (open ?) projects are listed, list also the open tasks, in hierarchy (and make it easy to differentiate them) 
+ - check - sometimes there is error in move, when it says something that the 'move to' is not task/project. Check if the list of tasks/projects might not be updated correctly [see if can attache to a running process for this ... (debug capabilit)]
+ - add a beep (or two) for success with winsound
+ - check: I sent only a 'list' command, and the result was a redo of the previous command ... it was not recognized as partial command and since list keeps the context of teh previous comand, it just did it!
+ - the following command "list activity col Tag inc TODAY" does not work, probably since the tag is a list, and the inc here assumes a string. Make it work for list also
+ - add in html listing, that if an item has a comment, there is a star added to it somewhere, THis is to see I have placed a comment for myself on thsi item
+ - add to 'online' also the list of the 'now' activities
+ - 
  - 
  - search to TODO and fix
  - document all commands
