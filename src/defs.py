@@ -383,8 +383,8 @@ help_message = '''
 50   sleep @10673 plus 88
 51   sleep @10673
 52   list wakeup
-53.1 move @104 to @102
-53.2 move @104 to @MP1
+53.1 move @104 to @102 [by name or by id, activity to task/project, task to project, project to megaproject]
+53.2 move @104 to @MP1 
 53.3 move @p1mp1 to @102
 53.4 move @p1mp1 to @MP1
 54   [not implemented] move list

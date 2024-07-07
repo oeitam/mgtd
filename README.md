@@ -49,6 +49,7 @@ add:
  - \\/we have state transitions date and text. print them together (ither in list @ID or specially)
  - \\/~~for list html - make default to not include closed (keep dormant and on hold for now)~~. allow also an option to list all (list html all)
  - \\/ (exists in html basically) add 'list tree @id' whcih will list all the items under this id. list tree @id listall - lists also non active (closed, dormant, onhold) items
+ - \\/add to 'stop_somehing' ability also to clsoe a megaproject. Try and see - why did I assume megaprojects live for ever ?
  - find a way to load multy line things (as the terminal window supports only single line). perhaps the solution is the 'fromcb' option - from clipboard
  - the commend "sleep @136 1" put 1 as wakeup time. Need to check for correct syntax on wakeup time
  - add ability to list for prioroity (like there is ability to list for state)\ 
@@ -90,7 +91,8 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - the following command "list activity col Tag inc TODAY" does not work, probably since the tag is a list, and the inc here assumes a string. Make it work for list also
  - add in html listing, that if an item has a comment, there is a star added to it somewhere, THis is to see I have placed a comment for myself on thsi item
  - add to 'online' also the list of the 'now' activities
- - 
+ - add count of open activities under each project and each megaproject and add the megaproject count to the printing in the hier html
+ - when closing a task/project, need to check that all under it is also 'closed' 
  - 
  - search to TODO and fix
  - document all commands
