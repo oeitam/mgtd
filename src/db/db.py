@@ -1184,7 +1184,7 @@ class Db(object):
                     t2 = 0
                 else:
                     t2 = max(self.list_resp_rows - self.list_resp_row_limit ,0)
-                resp_title  = self.transaction_type + ": " + "Showing items {} to {}:".format(t2+1,max(t1,0))
+                resp_title  = self.transaction_type + ": " + "Showing items {} to {} (out of {}):".format(t2+1,max(t1,0),t1)
                 resp_cont_1 = self.df_to_list_resp(df[t2:t1], which_db, resp_title)
                 if defs.use_tables == 'no':
                     self.list_resp = resp_title + '\n'+ resp_cont_1

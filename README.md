@@ -93,7 +93,11 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - add to 'online' also the list of the 'now' activities
  - add count of open activities under each project and each megaproject and add the megaproject count to the printing in the hier html
  - when closing a task/project, need to check that all under it is also 'closed' 
- - 
+ - create a move and close command or shortcut, as it is useful in weekly review
+ - add a check that there are no items with empty description as it fails things 
+ - when writing this line: edit @1168 Description | set a meeting on debug tools an .... it did not work with this error: set param FAILED with ERROR. So it thought it was a set param command, while it was edit command (no error message set). Need to check how come ...
+ - add the ability to jsut print out one field, especially the description, so it can be easily copied elsewhere
+ -
  - search to TODO and fix
  - document all commands
  - END
