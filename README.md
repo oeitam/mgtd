@@ -97,6 +97,7 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - add a check that there are no items with empty description as it fails things 
  - when writing this line: edit @1168 Description | set a meeting on debug tools an .... it did not work with this error: set param FAILED with ERROR. So it thought it was a set param command, while it was edit command (no error message set). Need to check how come ...
  - add the ability to jsut print out one field, especially the description, so it can be easily copied elsewhere
+ - scenario: created a new megeproject. created a new project. tried to do move of an existing activity to thei new project. this failed. After exiting and restarting - it worked.
  -
  - search to TODO and fix
  - document all commands
