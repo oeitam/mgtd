@@ -98,7 +98,8 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - when writing this line: edit @1168 Description | set a meeting on debug tools an .... it did not work with this error: set param FAILED with ERROR. So it thought it was a set param command, while it was edit command (no error message set). Need to check how come ...
  - add the ability to jsut print out one field, especially the description, so it can be easily copied elsewhere
  - scenario: created a new megeproject. created a new project. tried to do move of an existing activity to thei new project. this failed. After exiting and restarting - it worked.
- -
+ - add ability to search for all items containing a word (open and closed). Can add filtering on columns ... the goal is to be able to say 'did I had task/activity on this in the past' ?
+ - 
  - search to TODO and fix
  - document all commands
  - END
