@@ -169,7 +169,9 @@ class Db(object):
                                   'add comment'        : self.add_comment,
                                   'set priority'       : self.set_priority,
                                   'edit id'            : self.edit_item_field,
-                                  'import file'        : self.import_file,    
+                                  'import file'        : self.import_file,
+                                  'priority up'        : self.priority_updn, 
+                                  'priority dn'        : self.priority_updn, 
                                   #'list project'       : self.list_project,
                                   #'list task'          : self.list_task,
                                   #'list activity'      : self.list_activity,
@@ -1898,6 +1900,29 @@ class Db(object):
         if self.db_table[which_db] is not None: # database exists
             self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority'] = self.priority_to_set
         return True
+
+    def priority_updn(self):
+        which_db = self.find_in_which_db(self.use_this_ID_for_ref)
+        if which_db in ['dfm', 'dfp']: #can set priority only to tasks and activities
+            self.had_error("tried up or down priority to a megaproject or a project ({}, {})".format(self.use_this_ID_for_ref, which_db))
+            return False
+        if self.db_table[which_db] is not None: # database exists
+            if self.transaction_type == 'priority up': # the ask is to raise the priority
+                cp = self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority']
+                if cp == 'Low':
+                    self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority'] = 'Medium'
+                elif cp == 'Medium':
+                    self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority'] = 'High'
+            if self.transaction_type == 'priority dn': # the ask is to raise the priority
+                cp = self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority']
+                if cp == 'Medium':
+                    self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority'] = 'Low'
+                elif cp == 'High':
+                    self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority'] = 'Medium'
+        
+        self.success_response = f'Item {self.use_this_ID_for_ref} priority is {self.db_table[which_db].loc[self.use_this_ID_for_ref,'Priority']}' 
+        return True
+                
 
     def list_html(self):
         # top part

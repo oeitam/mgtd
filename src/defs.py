@@ -436,6 +436,8 @@ help_message = '''
 91   edit @596 Description | 2024 (Jan) CPSV TL nomination process
 92   close @1234 | closure note (== stop)
 93   list html
+94   pup @999 [bumps priority up by one degree for item @999]
+95   pdn @999 [lowers priority by one degree for item @999]
 
 
 

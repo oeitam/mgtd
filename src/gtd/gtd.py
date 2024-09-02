@@ -423,6 +423,8 @@ prefix("hier", 20)
 prefix("edit", 20)
 prefix("import", 20)
 prefix("prio", 20)
+prefix("pup", 20)
+prefix("pdn", 20)
 prefix("all", 20)
 
 
@@ -566,6 +568,16 @@ def nud(self):
             else:
                 gdb.move_to_name = token.value
         advance()  # to check what is beyond ..
+    elif gdb.transaction_type == 'priority up':
+        gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action 
+        #advance()
+        #if token.id != '(end)':
+        #    gdb.priority_to_set = str(token.value)
+    elif gdb.transaction_type == 'priority dn':
+        gdb.use_this_ID_for_ref = int(token.value)  # get the id relate to to the action 
+        #advance()
+        #if token.id != '(end)':
+        #    gdb.priority_to_set = str(token.value)
 
 
     self.first = expression()
@@ -1083,7 +1095,6 @@ def nud(self):
 @method(symbol("priority"))
 def nud(self):
     logger.debug("priority nud")
-    # creating a project
     gdb.transaction_type = 'set priority' # this is the command type
     self.second = expression() # this is moving forward
     return self
@@ -1110,3 +1121,16 @@ def nud(self):
     self.first = expression() # this is moving forward
     return self
 
+@method(symbol("pup"))
+def nud(self):
+    logger.debug("pup nud")
+    gdb.transaction_type = 'priority up' # this is the command type
+    self.second = expression() # this is moving forward
+    return self
+
+@method(symbol("pdn"))
+def nud(self):
+    logger.debug("pdn nud")
+    gdb.transaction_type = 'priority dn' # this is the command type
+    self.second = expression() # this is moving forward
+    return self
