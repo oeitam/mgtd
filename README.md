@@ -36,6 +36,7 @@ add:
  - ~~ Done document how to run in dev mode and production mode, direct and server modes~~
  - ~~Done issue: if project name is not unique across teh dtabase, and it is still used as identifier for task or activity relations, we may have a duality in task or activity relation. So - must make project name unique across the database or need to use IDs only for relations~~
  - ~~Done add ability to create a shortcut that will take input - for example - instead of writing 'list project for megaproject XXX' have a shortcut like 'lpfmp XXX'~~
+  - ~~EXISTS - add ability to search for all items containing a word (open and closed). Can add filtering on columns ... the goal is to be able to say 'did I had task/activity on this in the past' ? ==> exists~~
  - ~~Done add a shortcut like #<some shortcut> @ID ==> that will turn into something like tag @ID tTODAY | some text ?~~
  - \\/support bulk upload of commands from a txt file
  - \\/enable bulk priority [of a list of ids] some priorioty (bulk priority change)
@@ -98,7 +99,7 @@ project that is dormant all tasks and activities cannot be open or onhold, etc. 
  - when writing this line: edit @1168 Description | set a meeting on debug tools an .... it did not work with this error: set param FAILED with ERROR. So it thought it was a set param command, while it was edit command (no error message set). Need to check how come ...
  - add the ability to jsut print out one field, especially the description, so it can be easily copied elsewhere
  - scenario: created a new megeproject. created a new project. tried to do move of an existing activity to thei new project. this failed. After exiting and restarting - it worked.
- - add ability to search for all items containing a word (open and closed). Can add filtering on columns ... the goal is to be able to say 'did I had task/activity on this in the past' ?
+
  - 
  - search to TODO and fix
  - document all commands

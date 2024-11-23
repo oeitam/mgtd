@@ -1970,7 +1970,8 @@ class Db(object):
             # next - insert the tasks
             if self.dft is not None:
                 if True: #place holder to add check on if to list all or not all. default is do not print ended/closed/off items
-                    ldf = self.dft[self.dft['State'] != 'Closed']                       
+                    # ldf = self.dft[self.dft['State'] != 'Closed']     
+                    ldf = self.dft[self.dft['State'].isin(['Open'])] # not see what is not open             
                     ldf = ldf[::-1] #reversing the order, since every item is inserted in its place right after it meets its place in hierarchy. this causes order reversal, unless I reverse it in advacnce
                 for index, row in ldf.iterrows():
                     #print(index, row)
@@ -1989,7 +1990,8 @@ class Db(object):
             # last - insert the activities
             if self.dfa is not None:
                 if True: #place holder to add check on if to list all or not all. default is do not print ended/closed/off items
-                    ldf = self.dfa[self.dfa['State'] != 'Ended']                       
+                    # ldf = self.dfa[self.dfa['State'] != 'Ended']
+                    ldf = self.dfa[self.dfa['State'].isin(['Started'])] # not see what is not started                       
                     ldf = ldf[::-1] #reversing the order, since every item is inserted in its place right after it meets its place in hierarchy. this causes order reversal, unless I reverse it in advacnce
                 for index, row in ldf.iterrows():
                     #print(index, row)
