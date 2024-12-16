@@ -1036,6 +1036,19 @@ class Db(object):
                 else:
                     self.dfp.loc[self.use_this_ID_for_ref, 'State_Text'].append('Ended > ' + self.trans_description)
 
+        # megaproject
+        if (self.dfm is not None) and (state != 'id in db'):
+            state = 'found db'
+            if self.use_this_ID_for_ref in self.dfm.index.values:
+                state = 'id in db'
+                # process
+                self.dfm.loc[self.use_this_ID_for_ref, 'State'] = 'Off'
+                self.dfm.loc[self.use_this_ID_for_ref, 'Comments'].append(today_str)
+                if self.trans_description == 'clean':
+                    self.dfm.loc[self.use_this_ID_for_ref, 'Comments'].append('Off > ' + 'NA')
+                else:
+                    self.dfm.loc[self.use_this_ID_for_ref, 'Comments'].append('Off > ' + self.trans_description)
+
         if state != 'id in db':
             self.error_details = 'Request to stop ACTIVITY or TASK or PROJECT {} failed (probably incorrect ID)'\
                 .format(self.use_this_ID_for_ref)
@@ -1991,7 +2004,7 @@ class Db(object):
             if self.dfa is not None:
                 if True: #place holder to add check on if to list all or not all. default is do not print ended/closed/off items
                     # ldf = self.dfa[self.dfa['State'] != 'Ended']
-                    ldf = self.dfa[self.dfa['State'].isin(['Started'])] # not see what is not started                       
+                    ldf = self.dfa[self.dfa['State'].isin(['Started'])] # not see what is not open                       
                     ldf = ldf[::-1] #reversing the order, since every item is inserted in its place right after it meets its place in hierarchy. this causes order reversal, unless I reverse it in advacnce
                 for index, row in ldf.iterrows():
                     #print(index, row)
