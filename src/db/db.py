@@ -2052,8 +2052,12 @@ class Db(object):
                     last = i
                     # g = self.dfm[self.dfm['Name'] == mp_name]['PROJECTs_List'].values[0]
                     g = list(self.dfp[(self.dfp['MEGAPROJECT'] == mp_name) & (self.dfp['State'] != 'Ended')]['Name']) # not including ended projects
+                    localcnt = 0
+                    for k in range(start, last): 
+                        if rowslist[k]['Type4'].values[0] == 'Activity': 
+                            localcnt += 1
                     g1 = self.dfm[self.dfm['Name'] == mp_name]['Description'].values[0]
-                    scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}] =>=>=> {g} ({g1})</button>\n<div class="content">'
+                    scolap += f'<input type="checkbox"><button type="button" class="collapsible"><input type="checkbox">{mp_name} [{last-start-1}] Act: [{localcnt}] =>=>=> {g} ({g1})</button>\n<div class="content">'
                     if start == last: #megaproject with no projects in it
                         dd = pd.DataFrame(rowslist[start])
                     else:
